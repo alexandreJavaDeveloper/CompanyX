@@ -1,89 +1,41 @@
-# Project Title
+# RESTfull API for money transfers between accounts
 
-One Paragraph of project description goes here
+Is assumed this API is invoked by another internal system/service.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-TODO: procurar os todo que anotar
+Maven software for building and downloading dependencies to the project.
+Not require a pre-installed container/server is necessary.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+To have and run the project on your local machine you can clone this project (command line):
 ```
-Give the example
+git clone https://github.com/alexandreJavaDeveloper/CompanyX.git
 ```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+After downloading the project on your local machine, now is time to execute the tests.
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+For downloading all dependencies and to demonstrate the API with tests:
 ```
-Give an example
+mvn clean package
 ```
+NOTE: will have a lot of logs in the tests as expected.
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+Test Coverage more than 90%.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is open source and can be used for future studies.
 
-## Acknowledgments
+## To do
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Today the data store is running in-memory and is not using a real rollback method. In such case is necessary to create a rollback without parameters using JDBC, example: "Connection conn; conn.rollback()".
+* Use currency attribute when using transfer with other countries. Was already created an Enum called Currency.
+*  

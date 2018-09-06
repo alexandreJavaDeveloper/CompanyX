@@ -10,7 +10,7 @@ public class AccountTest {
 	@Test
 	public void hashCodeAccountTest() {
 		final Account account = new Account("1A", new BigDecimal(10));
-		final int expected = 50375;
+		final int expected = 1584;
 		Assert.assertEquals(expected, account.hashCode());
 	}
 

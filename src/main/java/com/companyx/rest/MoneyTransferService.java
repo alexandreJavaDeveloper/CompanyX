@@ -38,12 +38,14 @@ public class MoneyTransferService {
 	}
 
 	/**
-	 * TODO explicar porque POST
+	 * Transfer money between two accounts. In case of fail, an appropriate status code is returned.
+	 * POST is defined because this method is not idempotent, not safe and the transaction is treated
+	 * with money between two accounts.
 	 *
 	 * @param receiverAccountNumber
 	 * @param senderAccountNumber
 	 * @param moneyToTransfer
-	 * @return
+	 * @return JSON result
 	 */
 	@POST
 	@Produces(MoneyTransferService.FORMAT)

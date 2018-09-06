@@ -50,11 +50,7 @@ public class Account implements Cloneable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.accountNumber == null) ? 0 : this.accountNumber.hashCode());
-		result = prime * result + ((this.money == null) ? 0 : this.money.hashCode());
-		return result;
+		return this.accountNumber == null ? 0 : this.accountNumber.hashCode();
 	}
 
 	@Override
