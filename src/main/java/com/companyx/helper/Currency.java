@@ -12,7 +12,7 @@ public enum Currency {
 		this.currency = currency;
 	}
 
-	public String getCurrency() {
+	public String symbol() {
 		return this.currency;
 	}
 }

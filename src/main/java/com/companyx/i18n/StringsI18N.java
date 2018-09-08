@@ -14,4 +14,8 @@ public class StringsI18N {
 	public static final String START_TRANSFER_MONEY = "Starting the money transfer between two accounts.";
 
 	public static final String END_TRANSFER_MONEY = "Ending the money transfer between two accounts.";
+
+	public static final String ACCOUNT_NUMBER_MONEY_REQUIRED = "The fields Account number and Money cannot be null.";
+
+	public static final String INVALID_MONEY = "Invalid money value. Please, only more than 0.";
 }

@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.companyx.i18n.StringsI18N;
-import com.companyx.mediatype.JSONMoneyTransferResponse;
+import com.companyx.response.mediatype.JSONMoneyTransferResponse;
 
 public class MoneyTransferServiceTest
 {

@@ -4,15 +4,34 @@ import java.math.BigDecimal;
 
 import com.companyx.exception.InsufficientFundsException;
 import com.companyx.exception.InternalSystemError;
+import com.companyx.exception.InvalidAttributesException;
+import com.companyx.exception.InvalidMoneyException;
 import com.companyx.i18n.StringsI18N;
+import com.companyx.transaction.MoneyTransaction;
 
+/**
+ * Represents an account for performing money transaction by #{@link MoneyTransaction}.
+ *
+ * The methods {@link #sumMoney(BigDecimal)} and {@link #subtractMoney(BigDecimal)} are synchronized
+ * just to make sure will be synchronized as the call of them is already synchronized.
+ */
 public class Account implements Cloneable {
 
 	private final String accountNumber;
 
 	private BigDecimal money;
 
-	public Account(final String accountNumber, final BigDecimal money) {
+	/**
+	 * Constructor of Account.
+	 *
+	 * @param accountNumber not null
+	 * @param money not null
+	 * @throws InvalidAttributesException
+	 */
+	public Account(final String accountNumber, final BigDecimal money) throws InvalidAttributesException {
+		if (accountNumber == null || money == null)
+			throw new InvalidAttributesException(StringsI18N.ACCOUNT_NUMBER_MONEY_REQUIRED);
+
 		this.accountNumber = accountNumber;
 		this.money = money;
 	}
@@ -29,9 +48,13 @@ public class Account implements Cloneable {
 	 * Sum the current money with the {@value moneyToSum} parameter.
 	 *
 	 * @param moneyToSum
+	 * @throws InvalidMoneyException
 	 */
-	public synchronized void sumMoney(final BigDecimal moneyToSum) {
-		this.money = new BigDecimal(this.money.doubleValue() + moneyToSum.doubleValue());
+	public synchronized void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
+		if (moneyToSum.compareTo(BigDecimal.ZERO) < 0)
+			throw new InvalidMoneyException();
+
+		this.money = this.money.add(moneyToSum);
 	}
 
 	/**
@@ -39,13 +62,16 @@ public class Account implements Cloneable {
 	 *
 	 * @param moneyToSubtract
 	 * @throws InsufficientFundsException
+	 * @throws InvalidMoneyException
 	 */
-	public synchronized void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException {
-		// if there is no account balance
-		if (moneyToSubtract.doubleValue() > this.money.doubleValue())
+	public synchronized void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
+		if (moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
+			throw new InvalidMoneyException();
+
+		if (this.money.compareTo(moneyToSubtract) < 0)
 			throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
 
-		this.money = new BigDecimal(this.money.doubleValue() - moneyToSubtract.doubleValue());
+		this.money = this.money.subtract(moneyToSubtract);
 	}
 
 	@Override
@@ -56,7 +82,6 @@ public class Account implements Cloneable {
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) return false;
-		if (this.accountNumber == null) return false;
 		if (obj instanceof Account == false) return false;
 
 		final Account mtm = (Account) obj;

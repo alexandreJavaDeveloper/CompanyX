@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.companyx.exception.AccountNotFoundException;
 import com.companyx.exception.InternalSystemError;
+import com.companyx.exception.InvalidAttributesException;
 import com.companyx.i18n.StringsI18N;
 import com.companyx.model.Account;
 
@@ -17,35 +18,35 @@ public class RepositoryMock {
 	private static RepositoryMock instance;
 
 	// key = accountNumber, value = Account. Accounts are in safe mode. Only this class changes their behavior.
-	private Map<String, Account> accounts;
+	private final Map<String, Account> accounts;
 
 	/**
 	 * Private constructor.
+	 * Initialize the accounts map and build the accounts objects.
+	 * @throws InvalidAttributesException
 	 */
-	private RepositoryMock() {
-		// Do nothing
+	private RepositoryMock() throws InvalidAttributesException {
+		this.accounts = new HashMap<String, Account>(4);
 	}
 
-	public static RepositoryMock getInstance() {
-		if (RepositoryMock.instance == null)
-			RepositoryMock.instance = new RepositoryMock();
-
-		return RepositoryMock.instance;
-	}
-
-	/**
-	 * Initialize the memory data store.
-	 */
-	public void initialize() {
-		RepositoryMock.instance.accounts = new HashMap<String, Account>(4);
-		RepositoryMock.instance.buildAccounts();
-	}
-
-	private void buildAccounts() {
+	private void buildAccounts() throws InvalidAttributesException {
 		this.accounts.put("1A", new Account("1A", new BigDecimal(1500.50)));
 		this.accounts.put("2A", new Account("2A", new BigDecimal(4000.30)));
 		this.accounts.put("3A", new Account("3A", new BigDecimal(9880.00)));
 		this.accounts.put("4A", new Account("4A", new BigDecimal(10000.40)));
+	}
+
+	/**
+	 * @return Instance of the repository
+	 * @throws InvalidAttributesException
+	 */
+	public static RepositoryMock getInstance() throws InvalidAttributesException {
+		if (RepositoryMock.instance == null) {
+			RepositoryMock.instance = new RepositoryMock();
+			RepositoryMock.instance.buildAccounts();
+		}
+
+		return RepositoryMock.instance;
 	}
 
 	/**

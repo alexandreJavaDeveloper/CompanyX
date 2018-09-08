@@ -1,6 +1,5 @@
 package com.companyx.currency;
 
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,9 +10,9 @@ public class CurrencyTest {
 	@Test
 	public void currencyTest() {
 		Currency currency = Currency.EURO;
-		Assert.assertEquals("€", currency.getCurrency());
+		Assert.assertEquals("€", currency.symbol());
 
 		currency = Currency.POUND_STERLING;
-		Assert.assertEquals("£", currency.getCurrency());
+		Assert.assertEquals("£", currency.symbol());
 	}
 }

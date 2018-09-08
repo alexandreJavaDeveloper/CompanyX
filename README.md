@@ -37,5 +37,6 @@ This project is open source and can be used for future studies.
 ## To do
 
 * Today the data store is running in-memory and is not using a real rollback method. In such case is necessary to create a rollback without parameters using JDBC, example: "Connection conn; conn.rollback()".
+* In case of fail the rollback? What to do? Give the responsibility to the database?
 * Use currency attribute when using transfer with other countries. Was already created an Enum called Currency.
-*  
+* Think about treatment with Threads, specially in the money transfer accessing the database for itself and other classes (until now only the MoneyTransferService class access the database).
