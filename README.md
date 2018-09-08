@@ -21,7 +21,7 @@ Not require a pre-installed container/server is necessary.
 
 ### Installing
 
-To have and run the project on your local machine you can clone this project (command line):
+To run the project on your local machine you can clone this project (command line):
 ```
 git clone https://github.com/alexandreJavaDeveloper/CompanyX.git
 ```
@@ -51,13 +51,13 @@ http://localhost:8080/companyx/transfers/transfer/1A/2A/100.50
 
 After downloading the project on your local machine, now is time to execute the tests. Via command line, keep in the root program (where is the pom.xml file) for next executing.
 
-For downloading all dependencies, building the project and to demonstrate the API with tests:
+For downloading all dependencies and building the project:
 ```
 mvn clean package
 ```
 NOTE: will have a lot of logs in the tests as expected.
 
-Test Coverage more than 90%.
+Test Coverage > 90%.
 
 ## License
 
@@ -66,6 +66,6 @@ This project is open source and can be used for future studies.
 ## Top tips to do
 
 * Today the data store is running in-memory and is not using a real rollback method. In such case is necessary to create a rollback without parameters using JDBC, example: "Connection conn; conn.rollback()".
-* In case of fail the rollback? What to do? Give the responsibility to the database? Study the best option.
+* In case of fail in the rollback database? What to do? Give the responsibility to the database? Study the best option.
 * Use currency attribute when using transfer with other countries. Was already created an Enum called Currency.
 * To think about treatment with Threads, specially in the money transfer accessing the database for itself and other classes (today only the MoneyTransferService class access the database). The worries here is in case of new classes that could uses a database call (like retrieving an account) and can have inconsistent with the money transfers.
