@@ -3,13 +3,20 @@ package com.companyx.model;
 import java.math.BigDecimal;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.companyx.exception.InsufficientFundsException;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
+import com.companyx.mock.RepositoryMock;
 
 public class AccountTest {
+
+	@Before
+	public void setup() throws InvalidAttributesException {
+		RepositoryMock.getInstance().clean();
+	}
 
 	@Test
 	public void hashCodeAccountTest()  {

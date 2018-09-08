@@ -9,7 +9,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.companyx.exception.InvalidAttributesException;
 import com.companyx.i18n.StringsI18N;
+import com.companyx.mock.RepositoryMock;
 import com.companyx.response.mediatype.JSONMoneyTransferResponse;
 
 public class MoneyTransferServiceTest
@@ -17,8 +19,9 @@ public class MoneyTransferServiceTest
 	private MoneyTransferService service;
 
 	@Before
-	public void setup() {
+	public void setup() throws InvalidAttributesException {
 		this.service = new MoneyTransferService();
+		RepositoryMock.getInstance().clean();
 	}
 
 	@Test

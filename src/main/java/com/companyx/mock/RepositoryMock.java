@@ -88,4 +88,11 @@ public class RepositoryMock {
 	public void updateAccount(final Account account) {
 		RepositoryMock.instance.accounts.put(account.getAccountNumber(), account);
 	}
+
+	/**
+	 * Used for testing the application.
+	 */
+	public void clean() {
+		RepositoryMock.instance = null;
+	}
 }

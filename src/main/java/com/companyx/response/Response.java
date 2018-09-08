@@ -10,11 +10,21 @@ public interface Response {
 
 	void setDateTransaction(Date date);
 
+	Date getDateTransaction();
+
 	void setReceiverAccountNumber(String accountNumber);
+
+	String getReceiverAccountNumber();
 
 	void setReceiverCurrentMoney(BigDecimal money);
 
+	BigDecimal getReceiverCurrentMoney();
+
 	void setSenderAccountNumber(String accountNumber);
 
+	String getSenderAccountNumber();
+
 	void setSenderCurrentMoney(BigDecimal money);
+
+	BigDecimal getSenderCurrentMoney();
 }

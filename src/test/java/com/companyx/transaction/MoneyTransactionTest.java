@@ -2,18 +2,35 @@ package com.companyx.transaction;
 
 import java.math.BigDecimal;
 
+import org.codehaus.jettison.json.JSONException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.companyx.exception.InternalCommonException;
+import com.companyx.exception.InvalidAttributesException;
+import com.companyx.mock.RepositoryMock;
+import com.companyx.response.Response;
+import com.sun.jersey.test.framework.AppDescriptor;
+import com.sun.jersey.test.framework.JerseyTest;
+import com.sun.jersey.test.framework.WebAppDescriptor;
 
-public class MoneyTransactionTest {
+public class MoneyTransactionTest extends JerseyTest {
 
 	private MoneyTransaction transaction;
 
+	/**
+	 * Configuration of Jersey API
+	 */
+	@Override
+	protected AppDescriptor configure() {
+		return new WebAppDescriptor.Builder().build();
+	}
+
 	@Before
-	public void setup() {
+	public void setup() throws InvalidAttributesException {
 		this.transaction = new MoneyTransaction();
+		RepositoryMock.getInstance().clean();
 	}
 
 	@Test
@@ -22,38 +39,19 @@ public class MoneyTransactionTest {
 
 		final String receiverAccountNumber = "1A";
 		final String senderAccountNumber = "2A";
-		this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+		final Response response = this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
-		// TODO terminar aqui
+		Assert.assertEquals(receiverAccountNumber, response.getReceiverAccountNumber());
+		Assert.assertEquals(new BigDecimal(1510.50), response.getReceiverCurrentMoney());
+		Assert.assertEquals(senderAccountNumber, response.getSenderAccountNumber());
+		Assert.assertEquals(new BigDecimal(3990.30), response.getSenderCurrentMoney());
 	}
 
-	public void test() {
-		//		final BigDecimal moneyToTransfer = new BigDecimal(10);
-		//
-		//		final String receiverAccountNumber = "1A";
-		//		final String senderAccountNumber = "2A";
-		//
-		//		// This test will likely perform differently on different platforms.
-		//		final ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
-		//		final Counter sync = new Counter();
-		//		final Counter notSync = new Counter();
-		//
-		//		for (int i = 0; i < NUM_THREADS; i++) {
-		//			executor.submit(new Runnable() {
-		//				@Override
-		//				public void run() {
-		//					for (int i = 0; i < NUM_ITERATIONS; i++) {
-		//						sync.incSync();
-		//						notSync.inc();
-		//					}
-		//				}
-		//			});
-		//		}
-		//
-		//		executor.shutdown();
-		//		executor.awaitTermination(5, TimeUnit.SECONDS);
-		//		assertThat(sync.getValue(), is(NUM_THREADS * NUM_ITERATIONS));
-		//		assertThat(notSync.getValue(), is(not(NUM_THREADS * NUM_ITERATIONS)));
+	@Test
+	public void testUserFetchesSuccess() throws JSONException {
+		//		RestAssured.expect().
+		//		when().get("/companyx/transfers/test");
+		//		final WebResource webResource = this.client().resource("http://localhost:8080/");
+		//		final JSONObject json = webResource.path("/companyx/transfers/test2").post(JSONObject.class);
 	}
-	//TODO create test with threads
 }
