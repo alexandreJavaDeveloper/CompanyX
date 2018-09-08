@@ -28,6 +28,9 @@ public class MoneyTransaction {
 		LOGGER = Logger.getLogger(MoneyTransaction.class.getName());
 	}
 
+	/**
+	 * Basic constructor. Initialize the response factory object.
+	 */
 	public MoneyTransaction() {
 		this.responseFactory = new ResponseFactory();
 	}

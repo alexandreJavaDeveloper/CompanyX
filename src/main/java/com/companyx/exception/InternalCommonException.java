@@ -16,7 +16,7 @@ public abstract class InternalCommonException extends Exception {
 	}
 
 	/**
-	 * @return Status of response of the current Exception
+	 * @return Response status of the current Exception
 	 */
 	public abstract Status getResponseStatus();
 }

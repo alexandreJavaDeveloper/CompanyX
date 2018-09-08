@@ -23,6 +23,7 @@ public class RepositoryMock {
 	/**
 	 * Private constructor.
 	 * Initialize the accounts map and build the accounts objects.
+	 *
 	 * @throws InvalidAttributesException
 	 */
 	private RepositoryMock() throws InvalidAttributesException {

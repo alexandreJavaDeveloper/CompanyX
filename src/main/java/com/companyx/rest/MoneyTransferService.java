@@ -32,7 +32,7 @@ public class MoneyTransferService {
 	}
 
 	/**
-	 * Basic constructor.
+	 * Basic constructor. Initialize the money transaction object.
 	 */
 	public MoneyTransferService() {
 		this.moneyTransaction = new MoneyTransaction();

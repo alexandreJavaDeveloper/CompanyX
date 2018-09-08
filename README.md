@@ -3,11 +3,12 @@
 Is assumed this API is invoked by another internal system/service.
 
 ## Dependencies and Technologies Used:
-- Maven 3
-- JDK 1.8
-- JUnit 5.2.0
-- Tomcat 7 embedded
-- Jersey API 1.9
+
+- Maven 			3
+- JDK 				1.8
+- JUnit 			4.12
+- Tomcat embedded	7
+- Jersey API 		1.9
 
 ## Getting Started
 
@@ -26,6 +27,7 @@ git clone https://github.com/alexandreJavaDeveloper/CompanyX.git
 ```
 
 ### Executing this API via a HTTP browser
+
 Via commnand line, in the root program (where is the pom.xml file) execute:
 ```
 mvn clean package

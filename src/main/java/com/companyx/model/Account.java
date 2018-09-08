@@ -58,7 +58,7 @@ public class Account implements Cloneable {
 	}
 
 	/**
-	 * Subtract the current money with the {@value moneyToSum} parameter.
+	 * Subtract the current money with the {@value moneyToSubtract} parameter.
 	 *
 	 * @param moneyToSubtract
 	 * @throws InsufficientFundsException
@@ -96,7 +96,7 @@ public class Account implements Cloneable {
 	}
 
 	/**
-	 * Clones this account.
+	 * Clones this current account.
 	 *
 	 * @return Account
 	 * @throws InternalSystemError

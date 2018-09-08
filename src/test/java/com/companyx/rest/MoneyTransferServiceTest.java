@@ -55,17 +55,6 @@ public class MoneyTransferServiceTest
 	}
 
 	@Test
-	public void unsuccessTransferTest() throws InvalidAttributesException {
-		//		final String receiverAccountNumber = "1A";
-		//		final String senderAccountNumber = "2A";
-		//		final BigDecimal transferMoney = new BigDecimal(439999999999);
-		//
-		//		final Response response = this.service.transferMoneyService(receiverAccountNumber, senderAccountNumber, transferMoney);
-		//		final JSONMoneyTransferResponse entity = (JSONMoneyTransferResponse) response.getEntity();
-
-	}
-
-	@Test
 	public void userNotFoundTest() {
 		final String receiverAccountNumber = "1hfduihfdsiA";
 		final String senderAccountNumber = "2A";
@@ -100,8 +89,5 @@ public class MoneyTransferServiceTest
 		final Response response = this.service.transferMoneyService(receiverAccountNumber, senderAccountNumber, transferMoney);
 		final String responseMessage = (String) response.getEntity();
 		Assert.assertEquals(StringsI18N.INSUFFICIENT_FUNDS, responseMessage);
-
-		// just to test coverage as this class is not necessary to test
-		new StringsI18N();
 	}
 }

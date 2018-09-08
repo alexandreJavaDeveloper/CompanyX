@@ -1,7 +1,7 @@
 package com.companyx.helper;
 
 /**
- * TODO use currency when transfer money to another country.
+ * TODO use currency when transfer money to other countries.
  */
 public enum Currency {
 	POUND_STERLING("£"), EURO("€");

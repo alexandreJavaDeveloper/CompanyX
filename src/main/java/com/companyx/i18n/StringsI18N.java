@@ -4,7 +4,7 @@ public class StringsI18N {
 
 	public static final String TRANSFER_MONEY_ERROR = "Transfer problem between two accounts.";
 
-	// TODO replacement automatically with the account number
+	// TODO replacement automatically with the account number in the message
 	public static final String ACCOUNT_NOT_FOUND = "Account not found. Account number: ";
 
 	public static final String INTERNAL_ERROR = "Internal error were occurred.";
