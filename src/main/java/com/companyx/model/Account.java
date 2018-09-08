@@ -22,7 +22,7 @@ public class Account implements Cloneable {
 	private BigDecimal money;
 
 	/**
-	 * Constructor of Account.
+	 * Constructor of Account object.
 	 *
 	 * @param accountNumber not null
 	 * @param money not null

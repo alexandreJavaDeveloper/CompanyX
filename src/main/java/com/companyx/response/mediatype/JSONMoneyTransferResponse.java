@@ -1,6 +1,5 @@
 package com.companyx.response.mediatype;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,48 +20,58 @@ public class JSONMoneyTransferResponse implements Response {
 
 	private String receiverAccountNumber;
 
-	private BigDecimal senderCurrentMoney;
+	private String senderCurrentMoney;
 
-	private BigDecimal receiverCurrentMoney;
+	private String receiverCurrentMoney;
 
 	private Date dateTransaction;
 
+	@Override
 	public String getSenderAccountNumber() {
 		return this.senderAccountNumber;
 	}
 
+	@Override
 	public void setSenderAccountNumber(final String senderAccountNumber) {
 		this.senderAccountNumber = senderAccountNumber;
 	}
 
+	@Override
 	public String getReceiverAccountNumber() {
 		return this.receiverAccountNumber;
 	}
 
+	@Override
 	public void setReceiverAccountNumber(final String receiverAccountNumber) {
 		this.receiverAccountNumber = receiverAccountNumber;
 	}
 
-	public BigDecimal getSenderCurrentMoney() {
+	@Override
+	public String getSenderCurrentMoney() {
 		return this.senderCurrentMoney;
 	}
 
-	public void setSenderCurrentMoney(final BigDecimal senderCurrentMoney) {
+	@Override
+	public void setSenderCurrentMoney(final String senderCurrentMoney) {
 		this.senderCurrentMoney = senderCurrentMoney;
 	}
 
-	public BigDecimal getReceiverCurrentMoney() {
+	@Override
+	public String getReceiverCurrentMoney() {
 		return this.receiverCurrentMoney;
 	}
 
-	public void setReceiverCurrentMoney(final BigDecimal receiverCurrentMoney) {
+	@Override
+	public void setReceiverCurrentMoney(final String receiverCurrentMoney) {
 		this.receiverCurrentMoney = receiverCurrentMoney;
 	}
 
+	@Override
 	public Date getDateTransaction() {
 		return this.dateTransaction;
 	}
 
+	@Override
 	public void setDateTransaction(final Date dateTransaction) {
 		this.dateTransaction = dateTransaction;
 	}

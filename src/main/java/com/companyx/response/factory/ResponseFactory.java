@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.companyx.exception.AccountNotFoundException;
 import com.companyx.exception.InternalSystemError;
+import com.companyx.helper.MoneyFormatter;
 import com.companyx.model.Account;
 import com.companyx.response.Response;
 import com.companyx.response.mediatype.JSONMoneyTransferResponse;
@@ -29,9 +30,9 @@ public class ResponseFactory {
 
 		response.setDateTransaction(new Date());
 		response.setReceiverAccountNumber(receiver.getAccountNumber());
-		response.setReceiverCurrentMoney(receiver.getMoney());
+		response.setReceiverCurrentMoney(MoneyFormatter.formattMoney(receiver.getMoney()));
 		response.setSenderAccountNumber(sender.getAccountNumber());
-		response.setSenderCurrentMoney(sender.getMoney());
+		response.setSenderCurrentMoney(MoneyFormatter.formattMoney(sender.getMoney()));
 
 		return response;
 	}

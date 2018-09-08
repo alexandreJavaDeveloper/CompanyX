@@ -1,6 +1,5 @@
 package com.companyx.response;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,15 +15,15 @@ public interface Response {
 
 	String getReceiverAccountNumber();
 
-	void setReceiverCurrentMoney(BigDecimal money);
+	void setReceiverCurrentMoney(String money);
 
-	BigDecimal getReceiverCurrentMoney();
+	String getReceiverCurrentMoney();
 
 	void setSenderAccountNumber(String accountNumber);
 
 	String getSenderAccountNumber();
 
-	void setSenderCurrentMoney(BigDecimal money);
+	void setSenderCurrentMoney(String money);
 
-	BigDecimal getSenderCurrentMoney();
+	String getSenderCurrentMoney();
 }

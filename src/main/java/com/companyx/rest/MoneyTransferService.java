@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,10 +14,14 @@ import com.companyx.exception.InternalCommonException;
 import com.companyx.response.Response;
 import com.companyx.transaction.MoneyTransaction;
 
+/**
+ * Service of transactions for money transfer. Receive the requests, call the execution class and response to
+ * the requester, following the media type defined.
+ */
 @Path("/transfers")
 public class MoneyTransferService {
 
-	private static final String FORMAT = MediaType.APPLICATION_JSON;
+	private static final String MEDIA_TYPE = MediaType.APPLICATION_JSON;
 
 	private static final Logger LOGGER;
 
@@ -30,27 +32,10 @@ public class MoneyTransferService {
 	}
 
 	/**
-	 * Initialize fields and database memory. In case of real database won't be here this initialization.
+	 * Basic constructor.
 	 */
 	public MoneyTransferService() {
 		this.moneyTransaction = new MoneyTransaction();
-	}
-
-	@GET
-	@Produces(MoneyTransferService.FORMAT)
-	@Path("/test")
-	public javax.ws.rs.core.Response transferMoneyService() {
-		System.out.println("eita funcionou");
-		return javax.ws.rs.core.Response.ok(null).build();
-	}
-
-	@POST
-	@Path("/test2")
-	@Consumes(MoneyTransferService.FORMAT)
-	@Produces(MoneyTransferService.FORMAT)
-	public String createCustomer(final String a, final String b, final Integer c) {
-		System.out.println("wow");
-		return "";
 	}
 
 	/**
@@ -61,10 +46,10 @@ public class MoneyTransferService {
 	 * @param receiverAccountNumber
 	 * @param senderAccountNumber
 	 * @param moneyToTransfer
-	 * @return JSON result
+	 * @return response as JSON result
 	 */
-	@POST
-	@Produces(MoneyTransferService.FORMAT)
+	@GET
+	@Produces(MoneyTransferService.MEDIA_TYPE)
 	@Path("/transfer/{receiverAccountNumber}/{senderAccountNumber}/{moneyToTransfer}")
 	public javax.ws.rs.core.Response transferMoneyService(
 			@PathParam("receiverAccountNumber") final String receiverAccountNumber,

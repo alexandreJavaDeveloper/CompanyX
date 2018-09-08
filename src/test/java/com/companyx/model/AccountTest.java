@@ -15,7 +15,7 @@ public class AccountTest {
 
 	@Before
 	public void setup() throws InvalidAttributesException {
-		RepositoryMock.getInstance().clean();
+		RepositoryMock.getInstance().resetData();
 	}
 
 	@Test

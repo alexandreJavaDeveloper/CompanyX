@@ -14,7 +14,9 @@ import com.companyx.response.factory.ResponseFactory;
 
 /**
  * Unique class to execute all transactions of money.
- * The class Account perform the money changes, but only through this class.
+ *
+ * The class {@link Account} has two methods where is changed the money of the account, but is changed only
+ * whether this class decide to do that.
  */
 public class MoneyTransaction {
 

@@ -92,7 +92,7 @@ public class RepositoryMock {
 	/**
 	 * Used for testing the application.
 	 */
-	public void clean() {
+	public void resetData() {
 		RepositoryMock.instance = null;
 	}
 }

@@ -9,7 +9,7 @@ public class StringsI18N {
 
 	public static final String INTERNAL_ERROR = "Internal error were occurred.";
 
-	public static final String INSUFFICIENT_FUNDS = "Sorry, you have insufficient funds.";
+	public static final String INSUFFICIENT_FUNDS = "Sorry, you do not have sufficient funds.";
 
 	public static final String START_TRANSFER_MONEY = "Starting the money transfer between two accounts.";
 
