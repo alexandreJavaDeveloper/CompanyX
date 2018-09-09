@@ -69,3 +69,4 @@ This project is open source and can be used for future studies.
 * In case of fail in the rollback database? What to do? Give the responsibility to the database? Study the best option.
 * Use currency attribute when using transfer with other countries. Was already created an Enum called Currency.
 * To think about treatment with Threads, specially in the money transfer accessing the database for itself and other classes (today only the MoneyTransferService class access the database). The worries here is in case of new classes that could uses a database call (like retrieving an account) and can have inconsistent with the money transfers.
+* To the above approach, would be interesting to search about reactive programming, as it is an asynchronous programming paradigm concerned with data streams and the propagation of change.
