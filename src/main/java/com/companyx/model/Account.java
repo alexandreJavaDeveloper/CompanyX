@@ -11,11 +11,10 @@ import com.companyx.transaction.MoneyTransaction;
 
 /**
  * Represents an account for performing money transaction by #{@link MoneyTransaction}.
- *
- * The methods {@link #sumMoney(BigDecimal)} and {@link #subtractMoney(BigDecimal)} are synchronized
- * just to make sure will be synchronized as the call of them is already synchronized.
  */
 public class Account implements Cloneable {
+
+	private static final int DECIMAL_SCALE_MONEY = 2;
 
 	private final String accountNumber;
 
@@ -50,11 +49,12 @@ public class Account implements Cloneable {
 	 * @param moneyToSum
 	 * @throws InvalidMoneyException
 	 */
-	public synchronized void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
+	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
 		if (moneyToSum.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
-		this.money = this.money.add(moneyToSum);
+		this.money = this.money.add(moneyToSum). // setting the amount precision
+				setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 	}
 
 	/**
@@ -64,14 +64,15 @@ public class Account implements Cloneable {
 	 * @throws InsufficientFundsException
 	 * @throws InvalidMoneyException
 	 */
-	public synchronized void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
+	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
 		if (moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
 		if (this.money.compareTo(moneyToSubtract) < 0)
 			throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
 
-		this.money = this.money.subtract(moneyToSubtract);
+		this.money = this.money.subtract(moneyToSubtract). // setting the amount precision
+				setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 	}
 
 	@Override

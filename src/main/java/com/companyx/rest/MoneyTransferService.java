@@ -64,8 +64,11 @@ public class MoneyTransferService {
 			return javax.ws.rs.core.Response.ok(response).build();
 
 		} catch (final InternalCommonException exception) {
-			MoneyTransferService.LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
-			return javax.ws.rs.core.Response.status(exception.getResponseStatus()).entity(exception.getMessage()).build();
+			MoneyTransferService.LOGGER.log(
+					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] - Message: " + exception.getMessage(), exception);
+
+			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).
+					entity(exception.getMessage()).build();
 		}
 	}
 }

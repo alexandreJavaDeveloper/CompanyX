@@ -29,7 +29,7 @@ public class MoneyTransferServiceTest
 	public void successTransferTest() throws InvalidAttributesException {
 		final String receiverAccountNumber = "1A";
 		final String senderAccountNumber = "2A";
-		BigDecimal transferMoney = new BigDecimal(100);
+		BigDecimal transferMoney = new BigDecimal(100.34242342423);
 
 		Response response = this.service.transferMoneyService(receiverAccountNumber, senderAccountNumber, transferMoney);
 		JSONMoneyTransferResponse entity = (JSONMoneyTransferResponse) response.getEntity();
@@ -38,9 +38,9 @@ public class MoneyTransferServiceTest
 		Assert.assertNotNull(entity.getDateTransaction());
 
 		Assert.assertEquals(receiverAccountNumber, entity.getReceiverAccountNumber());
-		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(1600.50)), entity.getReceiverCurrentMoney());
+		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(1600.84)), entity.getReceiverCurrentMoney());
 		Assert.assertEquals(senderAccountNumber, entity.getSenderAccountNumber());
-		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(3900.30)), entity.getSenderCurrentMoney());
+		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(3899.96)), entity.getSenderCurrentMoney());
 
 		RepositoryMock.getInstance().resetData();
 		// sending 0 as money to transfer
