@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
-import com.companyx.helper.MoneyFormatter;
+import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
 import com.companyx.response.Response;
 
@@ -32,9 +32,9 @@ public class MoneyTransactionTest {
 		final Response response = this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
 		Assert.assertEquals(receiverAccountNumber, response.getReceiverAccountNumber());
-		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(1510.50)), response.getReceiverCurrentMoney());
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1510.50)), response.getReceiverCurrentMoney());
 		Assert.assertEquals(senderAccountNumber, response.getSenderAccountNumber());
-		Assert.assertEquals(MoneyFormatter.formattMoney(new BigDecimal(3990.30)), response.getSenderCurrentMoney());
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(3990.30)), response.getSenderCurrentMoney());
 	}
 
 	@Test(expected=InvalidMoneyException.class)

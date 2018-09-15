@@ -18,4 +18,13 @@ public class StringsI18N {
 	public static final String ACCOUNT_NUMBER_MONEY_REQUIRED = "The fields Account number and Money cannot be null.";
 
 	public static final String INVALID_MONEY = "Invalid money value. Please, only more than 0.";
+
+	public static final String INVALID_MONEY_TRANSFER = "Invalid money transfer parameter. Please, use like this example: \"1234.12\"";
+
+	public static final String JSON_DATA_NULL = "The JSON data sent is null.";
+
+	public static final String PARSING_JSON_ERROR = "The JSON data sent is invalid. Example of valid JSON data: "
+			+ "{\"receiverAccountNumber\":\"1A\","
+			+ "\"senderAccountNumber\":\"2A\","
+			+ "\"moneyToTransfer\":\"12.10\"}";
 }

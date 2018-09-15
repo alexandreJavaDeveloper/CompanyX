@@ -34,5 +34,10 @@
 			<artifactId>jersey-server</artifactId>
 			<version>1.9</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.sun.jersey</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>1.19.4</version>
+		</dependency>
 	</dependencies>
 </project>

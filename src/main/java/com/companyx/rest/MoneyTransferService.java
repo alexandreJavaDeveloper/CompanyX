@@ -1,16 +1,23 @@
 package com.companyx.rest;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+
 import com.companyx.exception.InternalCommonException;
+import com.companyx.helper.MoneyHelper;
+import com.companyx.model.MoneyTransfer;
+import com.companyx.reader.MediaTypeReader;
 import com.companyx.response.Response;
 import com.companyx.transaction.MoneyTransaction;
 
@@ -27,15 +34,18 @@ public class MoneyTransferService {
 
 	private final MoneyTransaction moneyTransaction;
 
+	private final MediaTypeReader reader;
+
 	static {
 		LOGGER = Logger.getLogger(MoneyTransferService.class.getName());
 	}
 
 	/**
-	 * Basic constructor. Initialize the money transaction object.
+	 * Basic constructor. Initialize the variables.
 	 */
 	public MoneyTransferService() {
 		this.moneyTransaction = new MoneyTransaction();
+		this.reader = new MediaTypeReader();
 	}
 
 	/**
@@ -43,20 +53,28 @@ public class MoneyTransferService {
 	 * POST is defined because this method is not idempotent, not safe and the transaction is treated
 	 * with money between two accounts.
 	 *
-	 * @param receiverAccountNumber
-	 * @param senderAccountNumber
-	 * @param moneyToTransfer
-	 * @return response as JSON result
+	 * {@value jsonData} expected as JSON format:
+	 * 		{receiverAccountNumber, senderAccountNumber, moneyToTransfer}
+	 *
+	 * @param jsonData
+	 * @return Response in JSON format including the updated accounts
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
 	 */
 	@POST
 	@Produces(MoneyTransferService.MEDIA_TYPE)
-	@Path("/transfer/{receiverAccountNumber}/{senderAccountNumber}/{moneyToTransfer}")
-	public javax.ws.rs.core.Response transferMoneyService(
-			@PathParam("receiverAccountNumber") final String receiverAccountNumber,
-			@PathParam("senderAccountNumber") final String senderAccountNumber,
-			@PathParam("moneyToTransfer") final BigDecimal moneyToTransfer) {
+	@Consumes(MoneyTransferService.MEDIA_TYPE)
+	@Path("/transfer")
+	public javax.ws.rs.core.Response transferMoneyService(final String jsonData) {
 
 		try {
+			final MoneyTransfer moneyTransfer = this.reader.readMoneyTransfer(jsonData);
+
+			final String receiverAccountNumber = moneyTransfer.getReceiverAccountNumber();
+			final String senderAccountNumber = moneyTransfer.getSenderAccountNumber();
+			final BigDecimal moneyToTransfer = MoneyHelper.transformTransferMoney(moneyTransfer.getMoneyToTransfer());
+
 			// execute the transaction
 			final Response response = this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
@@ -67,8 +85,7 @@ public class MoneyTransferService {
 			MoneyTransferService.LOGGER.log(
 					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] - Message: " + exception.getMessage(), exception);
 
-			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).
-					entity(exception.getMessage()).build();
+			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).build();
 		}
 	}
 }
