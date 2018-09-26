@@ -6,10 +6,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import com.companyx.exception.InternalCommonException;
 import com.companyx.helper.MoneyHelper;
@@ -59,13 +62,14 @@ public class MoneyTransferService {
 	 * @throws JsonMappingException
 	 * @throws IOException
 	 */
-	@GET
+	@POST
 	@Produces(MoneyTransferService.MEDIA_TYPE)
 	@Consumes(MoneyTransferService.MEDIA_TYPE)
 	@Path("/transfer")
 	public javax.ws.rs.core.Response transferMoneyService(final String jsonData) {
 
-		System.out.println("oui TODO remove");
+		MoneyTransferService.LOGGER.log(Level.INFO, "Start of transfer money service...");
+
 		try {
 			final MoneyTransfer moneyTransfer = this.reader.readMoneyTransfer(jsonData);
 
@@ -75,6 +79,8 @@ public class MoneyTransferService {
 
 			// execute the transaction
 			final Response response = this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+
+			MoneyTransferService.LOGGER.log(Level.INFO, "Ending of transfer money service...");
 
 			// return the response
 			return javax.ws.rs.core.Response.ok(response).build();

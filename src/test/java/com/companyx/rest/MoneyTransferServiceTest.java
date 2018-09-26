@@ -33,7 +33,7 @@ public class MoneyTransferServiceTest
 	//		try {
 	//			final Client client = Client.create();
 	//
-	//			final WebResource webResource = client.resource("http://localhost:8080/companyx/transfers/transfer");
+	//			final WebResource webResource = client.resource("http://localhost:8080/transfers/transfer");
 	//
 	//			final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).
 	//					post(ClientResponse.class, this.fetchJSONData("1A", "2A22", "100"));
