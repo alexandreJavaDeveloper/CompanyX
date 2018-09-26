@@ -2,7 +2,6 @@ package com.companyx.rest;
 
 import java.math.BigDecimal;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -15,9 +14,9 @@ import com.companyx.helper.MoneyHelper;
 import com.companyx.i18n.StringsI18N;
 import com.companyx.mock.RepositoryMock;
 import com.companyx.response.mediatype.JSONMoneyTransferResponse;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+//import com.sun.jersey.api.client.Client;
+//import com.sun.jersey.api.client.ClientResponse;
+//import com.sun.jersey.api.client.WebResource;
 
 public class MoneyTransferServiceTest
 {
@@ -29,27 +28,27 @@ public class MoneyTransferServiceTest
 		RepositoryMock.getInstance().resetData();
 	}
 
-	@Test
-	public void testServer() {
-		try {
-			final Client client = Client.create();
-
-			final WebResource webResource = client.resource("http://localhost:8080/companyx/transfers/transfer");
-
-			final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).
-					post(ClientResponse.class, this.fetchJSONData("1A", "2A22", "100"));
-
-			System.out.println(response.getStatus());
-
-			System.out.println("Output from Server .... \n");
-			final String output = response.getEntity(String.class);
-			System.out.println(output);
-
-		} catch (final Exception e) {
-			Assert.fail("Failed.");
-			e.printStackTrace();
-		}
-	}
+	//	@Test
+	//	public void testServer() {
+	//		try {
+	//			final Client client = Client.create();
+	//
+	//			final WebResource webResource = client.resource("http://localhost:8080/companyx/transfers/transfer");
+	//
+	//			final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).
+	//					post(ClientResponse.class, this.fetchJSONData("1A", "2A22", "100"));
+	//
+	//			System.out.println(response.getStatus());
+	//
+	//			System.out.println("Output from Server .... \n");
+	//			final String output = response.getEntity(String.class);
+	//			System.out.println(output);
+	//
+	//		} catch (final Exception e) {
+	//			Assert.fail("Failed.");
+	//			e.printStackTrace();
+	//		}
+	//	}
 
 	@Test
 	public void successTransferTest() throws InvalidAttributesException {

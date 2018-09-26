@@ -4,7 +4,7 @@
 	<groupId>com.companyx</groupId>
   	<artifactId>companyx</artifactId>
   	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	
   	<properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -20,24 +20,39 @@
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-core</artifactId>
-			<version>1.9</version>
+		    <groupId>org.codehaus.jackson</groupId>
+		    <artifactId>jackson-jaxrs</artifactId>
+		    <version>1.9.13</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.9</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.sun.jersey</groupId>
-		    <artifactId>jersey-client</artifactId>
-		    <version>1.19.4</version>
-		</dependency>
+        	<groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-server</artifactId>
+        	<version>9.2.3.v20140905</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>org.eclipse.jetty</groupId>
+        	<artifactId>jetty-servlet</artifactId>
+        	<version>9.2.3.v20140905</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>org.glassfish.jersey.core</groupId>
+        	<artifactId>jersey-server</artifactId>
+        	<version>2.7</version>
+    	</dependency>
+    	<dependency>
+	        <groupId>org.glassfish.jersey.containers</groupId>
+    	    <artifactId>jersey-container-servlet-core</artifactId>
+        	<version>2.7</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>org.glassfish.jersey.containers</groupId>
+        	<artifactId>jersey-container-jetty-http</artifactId>
+        	<version>2.7</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>org.glassfish.jersey.media</groupId>
+        	<artifactId>jersey-media-moxy</artifactId>
+        	<version>2.7</version>
+    	</dependency>
 	</dependencies>
 </project>

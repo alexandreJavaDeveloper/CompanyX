@@ -11,6 +11,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>RESTful API</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/com/companyx/rest/*</url-pattern>
     </servlet-mapping>
 </web-app>
