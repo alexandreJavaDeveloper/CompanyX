@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
-import com.companyx.i18n.StringsI18N;
 import com.companyx.mock.RepositoryMock;
 import com.companyx.response.mediatype.JSONMoneyTransferResponse;
 //import com.sun.jersey.api.client.Client;
@@ -78,18 +77,12 @@ public class MoneyTransferServiceTest
 	public void invalidParametersTransferTest() {
 		final Response response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "testing Strings"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
-		final String responseMessage = (String) response.getEntity();
-		Assert.assertEquals(StringsI18N.INVALID_MONEY_TRANSFER, responseMessage);
 	}
 
 	@Test
 	public void invalidParametersTransfer2Test() {
 		final Response response = this.service.transferMoneyService(null);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
-		final String responseMessage = (String) response.getEntity();
-		Assert.assertEquals(StringsI18N.JSON_DATA_NULL, responseMessage);
 	}
 
 	@Test
@@ -97,27 +90,18 @@ public class MoneyTransferServiceTest
 		final String jsonData = "{dsds,dsds,ds,ds,ds,ds,dsdsds,dsds,ds}";
 		final Response response = this.service.transferMoneyService(jsonData);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
-		final String responseMessage = (String) response.getEntity();
-		Assert.assertEquals(StringsI18N.PARSING_JSON_ERROR, responseMessage);
 	}
 
 	@Test
 	public void accountNotFoundTest() {
 		final Response response = this.service.transferMoneyService(this.fetchJSONData("1hfduihfdsiA", "2A", "90"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
-		final String responseMessage = (String) response.getEntity();
-		Assert.assertEquals(StringsI18N.ACCOUNT_NOT_FOUND + "1hfduihfdsiA", responseMessage);
 	}
 
 	@Test
 	public void insufficientFundsTest() {
 		final Response response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "5000.10"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
-		final String responseMessage = (String) response.getEntity();
-		Assert.assertEquals(StringsI18N.INSUFFICIENT_FUNDS, responseMessage);
 	}
 
 	private String fetchJSONData(final String receiverAccountNumber, final String senderAccountNumber, final String moneyToTransfer) {
