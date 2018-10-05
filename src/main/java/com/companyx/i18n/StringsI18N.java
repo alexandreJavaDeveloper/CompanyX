@@ -29,7 +29,7 @@ public class StringsI18N {
 
 	public static final String INVALID_MONEY_TRANSFER = "Invalid money transfer parameter. Please, use like this example: \"1234.12\"";
 
-	public static final String JSON_DATA_NULL = "The JSON data sent is null.";
+	public static final String INVALID_JSON_DATA = "The JSON data sent is null or empty.";
 
 	public static final String PARSING_JSON_ERROR = "The JSON data sent is invalid. Example of valid JSON data: "
 			+ "{\"receiverAccountNumber\":\"1A\","

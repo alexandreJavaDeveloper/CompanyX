@@ -12,9 +12,6 @@ import org.junit.Test;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-//import com.sun.jersey.api.client.Client;
-//import com.sun.jersey.api.client.ClientResponse;
-//import com.sun.jersey.api.client.WebResource;
 
 public class MoneyTransferServiceTest
 {
@@ -28,28 +25,6 @@ public class MoneyTransferServiceTest
 		this.moneyService = new MoneyService();
 		RepositoryMock.getInstance().resetData();
 	}
-
-	//	@Test
-	//	public void testServer() {
-	//		try {
-	//			final Client client = Client.create();
-	//
-	//			final WebResource webResource = client.resource("http://localhost:8080/transfers/transfer");
-	//
-	//			final ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).
-	//					post(ClientResponse.class, this.fetchJSONData("1A", "2A22", "100"));
-	//
-	//			System.out.println(response.getStatus());
-	//
-	//			System.out.println("Output from Server .... \n");
-	//			final String output = response.getEntity(String.class);
-	//			System.out.println(output);
-	//
-	//		} catch (final Exception e) {
-	//			Assert.fail("Failed.");
-	//			e.printStackTrace();
-	//		}
-	//	}
 
 	@Test
 	public void successTransferTest() throws InvalidAttributesException {
@@ -116,8 +91,47 @@ public class MoneyTransferServiceTest
 	}
 
 	@Test
-	public void depositMoneyServiceTest() {
-		// TODO
+	public void invalidDepositMoneyServiceTest() {
+		final String data = "";
+		final Response response = this.moneyTransferService.depositMoneyService(data);
+		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void invalid2DepositMoneyServiceTest() {
+		final String data = "jfdswuew7u89798798";
+		final Response response = this.moneyTransferService.depositMoneyService(data);
+		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void depositMoneyServiceTest() throws InvalidAttributesException {
+		final String accountNumber = "1A";
+		final String moneyToDeposit = "150.35";
+		final String data = this.fetchJSONDataToDeposit(accountNumber, moneyToDeposit);
+
+		// reset the database
+		RepositoryMock.getInstance().resetData();
+
+		Response response = this.moneyTransferService.depositMoneyService(data);
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		response = this.moneyService.accountBalanceService("1A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money1A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1650.85)), money1A);
+
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money2A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(4000.30)), money2A);
+	}
+
+	private String fetchJSONDataToDeposit(final String accountNumber, final String moneyToDeposit) {
+		return  "{\"accountNumber\":\"" + accountNumber + "\","
+				+ "\"moneyToDeposit\":\"" + moneyToDeposit + "\"}";
 	}
 
 	private String fetchJSONData(final String receiverAccountNumber, final String senderAccountNumber, final String moneyToTransfer) {

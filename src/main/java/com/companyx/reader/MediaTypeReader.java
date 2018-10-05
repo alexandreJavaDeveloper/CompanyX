@@ -23,8 +23,8 @@ public class MediaTypeReader {
 	 * @throws InvalidAttributesException
 	 */
 	public DataParsing readJSONData(final String jsonData, final Class<?> classType) throws InvalidAttributesException {
-		if (jsonData == null)
-			throw new InvalidAttributesException(StringsI18N.JSON_DATA_NULL);
+		if (jsonData == null || jsonData.isEmpty())
+			throw new InvalidAttributesException(StringsI18N.INVALID_JSON_DATA);
 
 		//JSON from String to Object
 		try {
