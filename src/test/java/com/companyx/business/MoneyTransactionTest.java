@@ -1,25 +1,32 @@
-package com.companyx.transaction;
+package com.companyx.business;
 
 import java.math.BigDecimal;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.companyx.business.MoneyTransaction;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-import com.companyx.response.Response;
+import com.companyx.rest.MoneyService;
 
 public class MoneyTransactionTest {
 
 	private MoneyTransaction transaction;
 
+	private MoneyService moneyService;
+
 	@Before
 	public void setup() throws InvalidAttributesException {
 		this.transaction = new MoneyTransaction();
+		this.moneyService = new MoneyService();
 		RepositoryMock.getInstance().resetData();
 	}
 
@@ -29,12 +36,18 @@ public class MoneyTransactionTest {
 
 		final String receiverAccountNumber = "1A";
 		final String senderAccountNumber = "2A";
-		final Response response = this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+		this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
-		Assert.assertEquals(receiverAccountNumber, response.getReceiverAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1510.50)), response.getReceiverCurrentMoney());
-		Assert.assertEquals(senderAccountNumber, response.getSenderAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(3990.30)), response.getSenderCurrentMoney());
+		Response response = this.moneyService.accountBalanceService("1A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money1A = (String) response.getEntity();
+
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money2A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1510.50)), money1A);
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(3990.30)), money2A);
 	}
 
 	@Test(expected=InvalidMoneyException.class)

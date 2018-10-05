@@ -12,18 +12,20 @@ import org.junit.Test;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-import com.companyx.response.mediatype.JSONMoneyTransferResponse;
 //import com.sun.jersey.api.client.Client;
 //import com.sun.jersey.api.client.ClientResponse;
 //import com.sun.jersey.api.client.WebResource;
 
 public class MoneyTransferServiceTest
 {
-	private MoneyTransferService service;
+	private MoneyTransferService moneyTransferService;
+
+	private MoneyService moneyService;
 
 	@Before
 	public void setup() throws InvalidAttributesException {
-		this.service = new MoneyTransferService();
+		this.moneyTransferService = new MoneyTransferService();
+		this.moneyService = new MoneyService();
 		RepositoryMock.getInstance().resetData();
 	}
 
@@ -51,57 +53,71 @@ public class MoneyTransferServiceTest
 
 	@Test
 	public void successTransferTest() throws InvalidAttributesException {
-		Response response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "100.34242342423"));
-		JSONMoneyTransferResponse entity = (JSONMoneyTransferResponse) response.getEntity();
+		this.moneyTransferService.transferMoneyService(this.fetchJSONData("1A", "2A", "100.34242342423"));
 
+		Response response = this.moneyService.accountBalanceService("1A");
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		Assert.assertNotNull(entity.getDateTransaction());
+		String money1A = (String) response.getEntity();
 
-		Assert.assertEquals("1A", entity.getReceiverAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1600.84)), entity.getReceiverCurrentMoney());
-		Assert.assertEquals("2A", entity.getSenderAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(3899.96)), entity.getSenderCurrentMoney());
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		String money2A = (String) response.getEntity();
 
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1600.84)), money1A);
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(3899.96)), money2A);
+
+		// reset the database
 		RepositoryMock.getInstance().resetData();
-		// sending 0 as money to transfer
-		response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "0"));
-		entity = (JSONMoneyTransferResponse) response.getEntity();
 
-		Assert.assertEquals("1A", entity.getReceiverAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1500.50)), entity.getReceiverCurrentMoney());
-		Assert.assertEquals("2A", entity.getSenderAccountNumber());
-		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(4000.30)), entity.getSenderCurrentMoney());
+		// sending 0 as money to transfer
+		response = this.moneyTransferService.transferMoneyService(this.fetchJSONData("1A", "2A", "0"));
+
+		response = this.moneyService.accountBalanceService("1A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		money1A = (String) response.getEntity();
+
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		money2A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1500.50)), money1A);
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(4000.30)), money2A);
 	}
 
 	@Test
 	public void invalidParametersTransferTest() {
-		final Response response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "testing Strings"));
+		final Response response = this.moneyTransferService.transferMoneyService(this.fetchJSONData("1A", "2A", "testing Strings"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalidParametersTransfer2Test() {
-		final Response response = this.service.transferMoneyService(null);
+		final Response response = this.moneyTransferService.transferMoneyService(null);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalidParsingJSONTest() {
 		final String jsonData = "{dsds,dsds,ds,ds,ds,ds,dsdsds,dsds,ds}";
-		final Response response = this.service.transferMoneyService(jsonData);
+		final Response response = this.moneyTransferService.transferMoneyService(jsonData);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void accountNotFoundTest() {
-		final Response response = this.service.transferMoneyService(this.fetchJSONData("1hfduihfdsiA", "2A", "90"));
+		final Response response = this.moneyTransferService.transferMoneyService(this.fetchJSONData("1hfduihfdsiA", "2A", "90"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void insufficientFundsTest() {
-		final Response response = this.service.transferMoneyService(this.fetchJSONData("1A", "2A", "5000.10"));
+		final Response response = this.moneyTransferService.transferMoneyService(this.fetchJSONData("1A", "2A", "5000.10"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void depositMoneyServiceTest() {
+		// TODO
 	}
 
 	private String fetchJSONData(final String receiverAccountNumber, final String senderAccountNumber, final String moneyToTransfer) {

@@ -2,12 +2,12 @@ package com.companyx.model;
 
 import java.math.BigDecimal;
 
+import com.companyx.business.MoneyTransaction;
 import com.companyx.exception.InsufficientFundsException;
 import com.companyx.exception.InternalSystemError;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
 import com.companyx.i18n.StringsI18N;
-import com.companyx.transaction.MoneyTransaction;
 
 /**
  * Represents an account for performing money transaction by #{@link MoneyTransaction}.

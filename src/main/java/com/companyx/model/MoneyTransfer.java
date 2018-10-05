@@ -1,6 +1,6 @@
 package com.companyx.model;
 
-public class MoneyTransfer {
+public class MoneyTransfer implements DataParsing {
 
 	private String receiverAccountNumber;
 

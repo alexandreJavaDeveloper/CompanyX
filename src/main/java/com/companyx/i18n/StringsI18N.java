@@ -15,6 +15,14 @@ public class StringsI18N {
 
 	public static final String END_TRANSFER_MONEY = "Ending the money transfer between two accounts.";
 
+	public static final String START_DEPOSIT_MONEY = "Starting the money deposit.";
+
+	public static final String END_DEPOSIT_MONEY = "Ending the money deposit.";
+
+	public static final String START_ACCOUNT_BALANCE_MONEY = "Starting the getting the account balance.";
+
+	public static final String END_ACCOUNT_BALANCE_MONEY = "Ending the getting the account balance.";
+
 	public static final String ACCOUNT_NUMBER_MONEY_REQUIRED = "The fields Account number and Money cannot be null.";
 
 	public static final String INVALID_MONEY = "Invalid money value. Please, only more than 0.";
@@ -27,4 +35,6 @@ public class StringsI18N {
 			+ "{\"receiverAccountNumber\":\"1A\","
 			+ "\"senderAccountNumber\":\"2A\","
 			+ "\"moneyToTransfer\":\"12.10\"}";
+
+	public static final String DEPOSIT_MONEY_ERROR = "Deposit money problem.";
 }
