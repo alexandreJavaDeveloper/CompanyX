@@ -2,7 +2,7 @@
 
 Is assumed this API is invoked by another internal system/service.
 
-## Dependencies and Technologies Used:
+## Dependencies and Technologies used
 
 - Maven 			3
 - JDK 				1.8
