@@ -15,7 +15,7 @@ import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-import com.companyx.rest.MoneyService;
+import com.companyx.service.MoneyService;
 
 public class MoneyTransactionTest {
 

@@ -1,10 +1,11 @@
 package com.companyx.app;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-
-import com.companyx.rest.MoneyTransferService;
 
 public class ServerConfiguration {
 
@@ -21,10 +22,11 @@ public class ServerConfiguration {
 				org.glassfish.jersey.servlet.ServletContainer.class, "/*");
 		jerseyServlet.setInitOrder(0);
 
+		final Map<String, String> parametersMap = new HashMap<String, String>();
+		parametersMap.put("jersey.config.server.provider.packages", "com.companyx.service");
+
 		// Tells the Jersey Servlet which REST service/class to load.
-		jerseyServlet.setInitParameter(
-				"jersey.config.server.provider.classnames",
-				MoneyTransferService.class.getCanonicalName());
+		jerseyServlet.setInitParameters(parametersMap);
 
 		try {
 			jettyServer.start();

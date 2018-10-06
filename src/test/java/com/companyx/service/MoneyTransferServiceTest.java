@@ -1,4 +1,4 @@
-package com.companyx.rest;
+package com.companyx.service;
 
 import java.math.BigDecimal;
 
@@ -12,6 +12,8 @@ import org.junit.Test;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
+import com.companyx.service.MoneyService;
+import com.companyx.service.MoneyTransferService;
 
 public class MoneyTransferServiceTest
 {

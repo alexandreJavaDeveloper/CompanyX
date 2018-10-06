@@ -1,8 +1,10 @@
 package com.companyx.exception;
 
+import java.io.Serializable;
+
 import javax.ws.rs.core.Response.Status;
 
-public abstract class InternalCommonException extends Exception {
+public abstract class InternalCommonException extends Exception implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

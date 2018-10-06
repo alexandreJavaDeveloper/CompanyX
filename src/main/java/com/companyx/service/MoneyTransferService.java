@@ -1,4 +1,4 @@
-package com.companyx.rest;
+package com.companyx.service;
 
 import java.math.BigDecimal;
 import java.util.logging.Level;
@@ -84,7 +84,9 @@ public class MoneyTransferService {
 					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
 							+ "- Message: " + exception.getMessage(), exception);
 
-			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).build();
+			return javax.ws.rs.core.Response.serverError().
+					header("message", exception.getMessage()).
+					status(exception.getResponseStatus()).build();
 		}
 	}
 
@@ -121,7 +123,9 @@ public class MoneyTransferService {
 					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
 							+ "- Message: " + exception.getMessage(), exception);
 
-			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).build();
+			return javax.ws.rs.core.Response.serverError().
+					header("message", exception.getMessage()).
+					status(exception.getResponseStatus()).build();
 		}
 	}
 }

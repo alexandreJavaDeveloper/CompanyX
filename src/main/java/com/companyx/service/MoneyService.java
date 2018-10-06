@@ -1,4 +1,4 @@
-package com.companyx.rest;
+package com.companyx.service;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,7 +41,6 @@ public class MoneyService {
 	 * @return formatted (following the current currency) account balance
 	 */
 	@GET
-	@Produces(MoneyService.MEDIA_TYPE)
 	@Consumes(MoneyService.MEDIA_TYPE)
 	@Path("/balances/{accountNumber}")
 	public Response accountBalanceService(@QueryParam("accountNumber") final String accountNumber) {
@@ -63,7 +61,9 @@ public class MoneyService {
 					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
 							+ "- Message: " + exception.getMessage(), exception);
 
-			return javax.ws.rs.core.Response.serverError().status(exception.getResponseStatus()).build();
+			return javax.ws.rs.core.Response.serverError().
+					header("message", exception.getMessage()).
+					status(exception.getResponseStatus()).build();
 		}
 	}
 }
