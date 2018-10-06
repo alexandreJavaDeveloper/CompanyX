@@ -1,4 +1,4 @@
-# RESTfull API for money transfers between accounts
+# RESTfull API for money transactions
 
 Is assumed this API is invoked by another internal system/service.
 
@@ -7,8 +7,8 @@ Is assumed this API is invoked by another internal system/service.
 - Maven 			3
 - JDK 				1.8
 - JUnit 			4.12
-- Tomcat embedded	7
-- Jersey API 		1.9
+- Jackson			1.9
+- Jersey	 		2.7
 
 ## Getting Started
 
@@ -17,34 +17,13 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 Maven software for building and downloading dependencies to the project.
-Not require a pre-installed container/server is necessary.
+Not required a container/server.
 
 ### Installing
 
 To run the project on your local machine you can clone this project (command line):
 ```
 git clone https://github.com/alexandreJavaDeveloper/CompanyX.git
-```
-
-### Executing this API via a HTTP browser
-
-Via commnand line, in the root program (where is the pom.xml file) execute:
-```
-mvn clean package
-```
-And now (to start the embedded Tomcat):
-```
-mvn tomcat:run
-```
-
-INFO: arguments sending by parameter:
-{1} - receiverAccountNumber
-{2} - senderAccountNumber
-{3} - moneyToTransfer
-
-In your browser:
-```
-http://localhost:8080/companyx/transfers/transfer/1A/2A/100.50
 ```
 
 ## Running the tests
@@ -57,7 +36,7 @@ mvn clean package
 ```
 NOTE: will have a lot of logs in the tests as expected.
 
-Test Coverage > 90%.
+Business Test Coverage = 100%
 
 ## License
 
