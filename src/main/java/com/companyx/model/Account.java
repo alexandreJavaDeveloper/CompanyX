@@ -50,7 +50,7 @@ public class Account implements Cloneable {
 	 * @throws InvalidMoneyException
 	 */
 	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
-		if (moneyToSum.compareTo(BigDecimal.ZERO) < 0)
+		if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
 		this.money = this.money.add(moneyToSum). // setting the amount precision
@@ -65,7 +65,7 @@ public class Account implements Cloneable {
 	 * @throws InvalidMoneyException
 	 */
 	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
-		if (moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
+		if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
 		if (this.money.compareTo(moneyToSubtract) < 0)

@@ -48,7 +48,6 @@ public class AccountTest {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSum = new BigDecimal(-1);
 		account.sumMoney(moneyToSum);
-		Assert.fail();
 	}
 
 	@Test
@@ -79,15 +78,30 @@ public class AccountTest {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSubtract = new BigDecimal(-1);
 		account.subtractMoney(moneyToSubtract);
-		Assert.fail();
 	}
 
 	@Test(expected=InsufficientFundsException.class)
-	public void invalidMoneyToSubtractMoneyTest2() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid2MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSubtract = new BigDecimal(1000);
 		account.subtractMoney(moneyToSubtract);
-		Assert.fail();
+	}
+
+	@Test(expected=InvalidMoneyException.class)
+	public void invalid3MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+		final Account account = new Account("1A", new BigDecimal(10));
+		final BigDecimal moneyToSubtract = null;
+		account.subtractMoney(moneyToSubtract);
+	}
+
+	@Test(expected=InvalidAttributesException.class)
+	public void invalid4MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+		new Account("1A", null);
+	}
+
+	@Test(expected=InvalidAttributesException.class)
+	public void invalid5MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+		new Account(null, new BigDecimal(10));
 	}
 
 	@Test

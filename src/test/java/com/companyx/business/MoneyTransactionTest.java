@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.companyx.business.MoneyTransaction;
+import com.companyx.exception.AccountNotFoundException;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
@@ -19,14 +19,17 @@ import com.companyx.service.MoneyService;
 
 public class MoneyTransactionTest {
 
-	private MoneyTransaction transaction;
+	private MoneyTransaction moneyTransaction;
+
+	private MoneyOperation moneyOperation;
 
 	private MoneyService moneyService;
 
 	@Before
 	public void setup() throws InvalidAttributesException {
-		this.transaction = new MoneyTransaction();
+		this.moneyTransaction = new MoneyTransaction();
 		this.moneyService = new MoneyService();
+		this.moneyOperation = new MoneyOperation();
 		RepositoryMock.getInstance().resetData();
 	}
 
@@ -36,7 +39,7 @@ public class MoneyTransactionTest {
 
 		final String receiverAccountNumber = "1A";
 		final String senderAccountNumber = "2A";
-		this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+		this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
 		Response response = this.moneyService.accountBalanceService("1A");
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -56,8 +59,39 @@ public class MoneyTransactionTest {
 
 		final String receiverAccountNumber = "1A";
 		final String senderAccountNumber = "2A";
-		this.transaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+		this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+	}
 
-		Assert.fail();
+	@Test(expected=AccountNotFoundException.class)
+	public void invalidDepositTest() throws InternalCommonException {
+		final String accountNumber = "fsdfsd";
+		final BigDecimal moneyToDeposit = null;
+		this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
+	}
+
+	@Test(expected=InvalidMoneyException.class)
+	public void invalid2DepositTest() throws InternalCommonException {
+		final String accountNumber = "1A";
+		final BigDecimal moneyToDeposit = null;
+		this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
+	}
+
+	@Test(expected=InvalidMoneyException.class)
+	public void invalid3DepositTest() throws InternalCommonException {
+		final String accountNumber = "1A";
+		final BigDecimal moneyToDeposit = new BigDecimal(-10);
+		this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
+	}
+
+	@Test
+	public void depositTest() throws InternalCommonException {
+		final String accountNumber = "1A";
+		final BigDecimal moneyToDeposit = new BigDecimal(10.47);
+
+		RepositoryMock.getInstance().resetData();
+		this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
+
+		final BigDecimal accountBalance = this.moneyOperation.getAccountBalance(accountNumber);
+		Assert.assertTrue(accountBalance.doubleValue() == new Double(1510.97));
 	}
 }

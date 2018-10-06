@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-import com.companyx.service.MoneyService;
 
 public class MoneyServiceTest {
 
@@ -27,6 +26,13 @@ public class MoneyServiceTest {
 	@Test
 	public void invalidAccountBalanceServiceTest() throws InvalidAttributesException {
 		final String accountNumber = "fds789fsd79";
+		final Response response = this.moneyService.accountBalanceService(accountNumber);
+		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void invalid2AccountBalanceServiceTest() throws InvalidAttributesException {
+		final String accountNumber = null;
 		final Response response = this.moneyService.accountBalanceService(accountNumber);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
