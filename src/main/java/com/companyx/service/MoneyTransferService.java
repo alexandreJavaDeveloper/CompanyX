@@ -17,6 +17,7 @@ import com.companyx.helper.MoneyHelper;
 import com.companyx.model.MoneyDeposit;
 import com.companyx.model.MoneyTransfer;
 import com.companyx.reader.MediaTypeReader;
+import com.companyx.service.response.ResponseService;
 
 /**
  * Service of transactions for money transfer. Receive the requests, call the execution class and response to
@@ -31,6 +32,8 @@ public class MoneyTransferService {
 
 	private final MoneyTransaction moneyTransaction;
 
+	private final ResponseService responseService;
+
 	private final MediaTypeReader reader;
 
 	static {
@@ -42,6 +45,7 @@ public class MoneyTransferService {
 	 */
 	public MoneyTransferService() {
 		this.moneyTransaction = new MoneyTransaction();
+		this.responseService = new ResponseService();
 		this.reader = new MediaTypeReader();
 	}
 
@@ -80,13 +84,7 @@ public class MoneyTransferService {
 			return javax.ws.rs.core.Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
-			MoneyTransferService.LOGGER.log(
-					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
-							+ "- Message: " + exception.getMessage(), exception);
-
-			return javax.ws.rs.core.Response.serverError().
-					header("message", exception.getMessage()).
-					status(exception.getResponseStatus()).build();
+			return this.responseService.prepareErrorResponse(MoneyTransferService.LOGGER, exception);
 		}
 	}
 
@@ -119,13 +117,7 @@ public class MoneyTransferService {
 			return javax.ws.rs.core.Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
-			MoneyTransferService.LOGGER.log(
-					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
-							+ "- Message: " + exception.getMessage(), exception);
-
-			return javax.ws.rs.core.Response.serverError().
-					header("message", exception.getMessage()).
-					status(exception.getResponseStatus()).build();
+			return this.responseService.prepareErrorResponse(MoneyTransferService.LOGGER, exception);
 		}
 	}
 }

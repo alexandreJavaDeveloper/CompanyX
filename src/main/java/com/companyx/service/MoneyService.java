@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import com.companyx.business.MoneyOperation;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.helper.MoneyHelper;
+import com.companyx.service.response.ResponseService;
 
 @Path("/money")
 public class MoneyService {
@@ -23,6 +24,8 @@ public class MoneyService {
 
 	private final MoneyOperation moneyOperation;
 
+	private final ResponseService responseService;
+
 	static {
 		LOGGER = Logger.getLogger(MoneyService.class.getName());
 	}
@@ -32,6 +35,7 @@ public class MoneyService {
 	 */
 	public MoneyService() {
 		this.moneyOperation = new MoneyOperation();
+		this.responseService = new ResponseService();
 	}
 
 	/**
@@ -57,13 +61,7 @@ public class MoneyService {
 			return javax.ws.rs.core.Response.ok(accountBalance).build();
 
 		} catch (final InternalCommonException exception) {
-			MoneyService.LOGGER.log(
-					Level.SEVERE, "Status code response [" + exception.getResponseStatus().getStatusCode() + "] "
-							+ "- Message: " + exception.getMessage(), exception);
-
-			return javax.ws.rs.core.Response.serverError().
-					header("message", exception.getMessage()).
-					status(exception.getResponseStatus()).build();
+			return this.responseService.prepareErrorResponse(MoneyService.LOGGER, exception);
 		}
 	}
 }
