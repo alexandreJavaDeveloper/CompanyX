@@ -32,7 +32,7 @@ public class Account implements Cloneable {
 			throw new InvalidAttributesException(StringsI18N.ACCOUNT_NUMBER_MONEY_REQUIRED);
 
 		this.accountNumber = accountNumber;
-		this.money = money;
+		this.money = money.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 	}
 
 	public String getAccountNumber() {
@@ -68,7 +68,7 @@ public class Account implements Cloneable {
 		if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
-		if (this.money.compareTo(moneyToSubtract) < 0)
+		if (this.money.compareTo(moneyToSubtract.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP)) < 0)
 			throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
 
 		this.money = this.money.subtract(moneyToSubtract). // setting the amount precision

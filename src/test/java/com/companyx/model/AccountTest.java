@@ -94,14 +94,100 @@ public class AccountTest {
 		account.subtractMoney(moneyToSubtract);
 	}
 
-	@Test(expected=InvalidAttributesException.class)
+	@Test
+	public void subtractMoneyTest() {
+
+		try {
+
+			RepositoryMock.getInstance().resetData();
+
+			final Account account = new Account("1A", new BigDecimal(1500.50));
+
+			BigDecimal moneyToSubtract = new BigDecimal(1500.40);
+			account.subtractMoney(moneyToSubtract);
+
+			moneyToSubtract = new BigDecimal(0.10);
+			account.subtractMoney(moneyToSubtract);
+
+		} catch (final InvalidAttributesException e) {
+			e.printStackTrace();
+			Assert.fail();
+		} catch (final InsufficientFundsException e) {
+			e.printStackTrace();
+			Assert.fail();
+		} catch (final InvalidMoneyException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test
+	public void subtract2MoneyTest() {
+
+		try {
+
+			RepositoryMock.getInstance().resetData();
+
+			final Account account = new Account("1A", new BigDecimal(1500.50));
+
+			BigDecimal moneyToSubtract = new BigDecimal(1500.403456789765467);
+			account.subtractMoney(moneyToSubtract);
+
+			moneyToSubtract = new BigDecimal(0.10);
+			account.subtractMoney(moneyToSubtract);
+
+		} catch (final InvalidAttributesException e) {
+			e.printStackTrace();
+			Assert.fail();
+		} catch (final InsufficientFundsException e) {
+			e.printStackTrace();
+			Assert.fail();
+		} catch (final InvalidMoneyException e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
+	}
+
+	@Test(expected=InsufficientFundsException.class)
 	public void invalid4MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+
+		RepositoryMock.getInstance().resetData();
+
+		final Account account = new Account("1A", new BigDecimal(1500.50));
+		BigDecimal moneyToSubtract = new BigDecimal(1500.40);
+		account.subtractMoney(moneyToSubtract);
+
+		moneyToSubtract = new BigDecimal(0.11);
+		account.subtractMoney(moneyToSubtract);
+	}
+
+	@Test(expected=InsufficientFundsException.class)
+	public void invalid5MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+
+		RepositoryMock.getInstance().resetData();
+
+		final Account account = new Account("1A", new BigDecimal(1500.50));
+		BigDecimal moneyToSubtract = new BigDecimal(1500.40);
+		account.subtractMoney(moneyToSubtract);
+
+		moneyToSubtract = new BigDecimal(0.106999);
+		account.subtractMoney(moneyToSubtract);
+	}
+
+	@Test(expected=InvalidAttributesException.class)
+	public void invalidNewAccountTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
 		new Account("1A", null);
 	}
 
 	@Test(expected=InvalidAttributesException.class)
-	public void invalid5MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid2NewAccountTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
 		new Account(null, new BigDecimal(10));
+	}
+
+	@Test
+	public void validNewAccountTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+		final Account account = new Account("AAA32", new BigDecimal(10.6578976));
+		Assert.assertTrue(Double.parseDouble("10.66") == account.getMoney().doubleValue());
 	}
 
 	@Test
@@ -125,6 +211,7 @@ public class AccountTest {
 			Assert.fail();
 		}
 	}
+
 	@Test
 	public void methodGetMoneyNotChangeableTest() {
 		try {
@@ -133,7 +220,7 @@ public class AccountTest {
 			final BigDecimal moneyToSum = new BigDecimal(100000);
 			final BigDecimal money = account.getMoney();
 			money.add(moneyToSum);
-			Assert.assertEquals(moneyAccount, account.getMoney());
+			Assert.assertTrue(moneyAccount.doubleValue() == account.getMoney().doubleValue());
 		} catch (final InvalidAttributesException  e) {
 			Assert.fail();
 		}
@@ -143,7 +230,7 @@ public class AccountTest {
 	public void toStringAccountTest()  {
 		try {
 			final Account account = new Account("1A", new BigDecimal(10));
-			Assert.assertEquals("Account [accountNumber=1A, money=10]", account.toString());
+			Assert.assertEquals("Account [accountNumber=1A, money=10.00]", account.toString());
 		} catch (final InvalidAttributesException  e) {
 			Assert.fail();
 		}
