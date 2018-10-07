@@ -24,14 +24,14 @@ public class MoneyHelper {
 	}
 
 	/**
-	 * @param moneyToTransferStr
-	 * @return money transformed into BigDecimal. In case of fail, exception is throw
+	 * @param moneyToTranslate
+	 * @return Translates the string representation of a BigDecimal into a BigDecimal
 	 * @throws InvalidAttributesException
 	 */
-	public static BigDecimal transformTransferMoney(final String moneyToTransferStr) throws InvalidAttributesException {
+	public static BigDecimal translateMoney(final String moneyToTranslate) throws InvalidAttributesException {
 		BigDecimal moneyToTransfer;
 		try {
-			moneyToTransfer = new BigDecimal(moneyToTransferStr);
+			moneyToTransfer = new BigDecimal(moneyToTranslate);
 		} catch (final NumberFormatException e) {
 			throw new InvalidAttributesException(StringsI18N.INVALID_MONEY_TRANSFER);
 		}

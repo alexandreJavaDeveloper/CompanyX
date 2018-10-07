@@ -19,6 +19,10 @@ public class StringsI18N {
 
 	public static final String END_DEPOSIT_MONEY = "Ending the money deposit.";
 
+	public static final String START_CASH_WITHDRAW = "Starting the withdraw money.";
+
+	public static final String END_CASH_WITHDRAW = "Ending the withdraw money.";
+
 	public static final String START_ACCOUNT_BALANCE_MONEY = "Starting the getting the account balance.";
 
 	public static final String END_ACCOUNT_BALANCE_MONEY = "Ending the getting the account balance.";
@@ -37,4 +41,6 @@ public class StringsI18N {
 			+ "\"moneyToTransfer\":\"12.10\"}";
 
 	public static final String DEPOSIT_MONEY_ERROR = "Deposit money problem.";
+
+	public static final String CASH_WITHDRAW_ERROR = "Cash withdraw problem.";
 }

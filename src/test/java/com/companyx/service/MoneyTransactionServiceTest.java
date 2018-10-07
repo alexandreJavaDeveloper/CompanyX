@@ -12,8 +12,6 @@ import org.junit.Test;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
-import com.companyx.service.MoneyService;
-import com.companyx.service.MoneyTransactionService;
 
 public class MoneyTransactionServiceTest
 {
@@ -93,29 +91,29 @@ public class MoneyTransactionServiceTest
 	}
 
 	@Test
-	public void invalidDepositMoneyServiceTest() {
+	public void invalidMoneyDepositServiceTest() {
 		final String data = "";
-		final Response response = this.moneyTransactionService.depositMoneyService(data);
+		final Response response = this.moneyTransactionService.moneyDepositService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
-	public void invalid2DepositMoneyServiceTest() {
+	public void invalid2MoneyDepositServiceTest() {
 		final String data = "jfdswuew7u89798798";
-		final Response response = this.moneyTransactionService.depositMoneyService(data);
+		final Response response = this.moneyTransactionService.moneyDepositService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
-	public void depositMoneyServiceTest() throws InvalidAttributesException {
+	public void moneyDepositServiceTest() throws InvalidAttributesException {
 		final String accountNumber = "1A";
 		final String moneyToDeposit = "150.35";
-		final String data = this.fetchJSONDataToDeposit(accountNumber, moneyToDeposit);
+		final String data = this.fetchJSONData(accountNumber, moneyToDeposit);
 
 		// reset the database
 		RepositoryMock.getInstance().resetData();
 
-		Response response = this.moneyTransactionService.depositMoneyService(data);
+		Response response = this.moneyTransactionService.moneyDepositService(data);
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		response = this.moneyService.accountBalanceService("1A");
@@ -131,9 +129,48 @@ public class MoneyTransactionServiceTest
 		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(4000.30)), money2A);
 	}
 
-	private String fetchJSONDataToDeposit(final String accountNumber, final String moneyToDeposit) {
+	@Test
+	public void invalidCashWithdrawServiceTest() {
+		final String data = "";
+		final Response response = this.moneyTransactionService.cashWithdrawService(data);
+		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void invalid2CashWithdrawServiceTest() {
+		final String data = "jfdswuew7u89798798";
+		final Response response = this.moneyTransactionService.cashWithdrawService(data);
+		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void cashWithdrawServiceTest() throws InvalidAttributesException {
+		final String accountNumber = "1A";
+		final String moneyToCashWithdraw = "150.35";
+		final String data = this.fetchJSONData(accountNumber, moneyToCashWithdraw);
+
+		// reset the database
+		RepositoryMock.getInstance().resetData();
+
+		Response response = this.moneyTransactionService.cashWithdrawService(data);
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		response = this.moneyService.accountBalanceService("1A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money1A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(1350.15)), money1A);
+
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money2A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(4000.30)), money2A);
+	}
+
+	private String fetchJSONData(final String accountNumber, final String money) {
 		return  "{\"accountNumber\":\"" + accountNumber + "\","
-				+ "\"moneyToDeposit\":\"" + moneyToDeposit + "\"}";
+				+ "\"money\":\"" + money + "\"}";
 	}
 
 	private String fetchJSONData(final String receiverAccountNumber, final String senderAccountNumber, final String moneyToTransfer) {

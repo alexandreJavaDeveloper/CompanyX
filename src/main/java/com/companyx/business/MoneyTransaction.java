@@ -68,7 +68,7 @@ public class MoneyTransaction {
 	}
 
 	/**
-	 * Performs the deposit into the {@value accountNumber}.
+	 * Performs the deposit into the {@value accountNumber} account.
 	 * In case of fail, rollback action is executed.
 	 *
 	 * @param accountNumber
@@ -95,6 +95,42 @@ public class MoneyTransaction {
 		} catch (final InternalCommonException e) {
 
 			MoneyTransaction.LOGGER.log(Level.SEVERE, StringsI18N.DEPOSIT_MONEY_ERROR, e);
+
+			// in case of any problem the rollback should be done
+			// TODO in case of fail? What to do? Give the responsibility to the database?
+			RepositoryMock.getInstance().rollback(backupAccount);
+			throw e;
+		}
+	}
+
+	/**
+	 * Performs the cash withdraw into the {@value accountNumber} account.
+	 * In case of fail, rollback action is executed.
+	 *
+	 * @param accountNumber
+	 * @param cashToWithdraw
+	 * @throws InternalCommonException
+	 */
+	public void cashWithdraw(final String accountNumber, final BigDecimal cashToWithdraw) throws InternalCommonException {
+
+		MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.START_CASH_WITHDRAW);
+
+		final Account account = RepositoryMock.getInstance().find(accountNumber);
+
+		final Account backupAccount = account.cloneAccount();
+
+		try {
+
+			account.subtractMoney(cashToWithdraw);
+
+			// update the account
+			RepositoryMock.getInstance().updateAccount(account);
+
+			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_CASH_WITHDRAW);
+
+		} catch (final InternalCommonException e) {
+
+			MoneyTransaction.LOGGER.log(Level.SEVERE, StringsI18N.CASH_WITHDRAW_ERROR, e);
 
 			// in case of any problem the rollback should be done
 			// TODO in case of fail? What to do? Give the responsibility to the database?

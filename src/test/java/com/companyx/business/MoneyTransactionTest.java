@@ -94,4 +94,30 @@ public class MoneyTransactionTest {
 		final BigDecimal accountBalance = this.moneyBasicOperator.getAccountBalance(accountNumber);
 		Assert.assertTrue(accountBalance.doubleValue() == new Double(1510.97));
 	}
+
+	@Test(expected=InvalidMoneyException.class)
+	public void invalidCashWithdrawTest() throws InternalCommonException {
+		final String accountNumber = "1A";
+		final BigDecimal moneyToDeposit = null;
+		this.moneyTransaction.cashWithdraw(accountNumber, moneyToDeposit);
+	}
+
+	@Test(expected=AccountNotFoundException.class)
+	public void invalid2CashWithdrawTest() throws InternalCommonException {
+		final String accountNumber = null;
+		final BigDecimal moneyToDeposit = null;
+		this.moneyTransaction.cashWithdraw(accountNumber, moneyToDeposit);
+	}
+
+	@Test
+	public void cashWithdrawTest() throws InternalCommonException {
+		final String accountNumber = "1A";
+		final BigDecimal moneyToDeposit = new BigDecimal(10.47);
+
+		RepositoryMock.getInstance().resetData();
+		this.moneyTransaction.cashWithdraw(accountNumber, moneyToDeposit);
+
+		final BigDecimal accountBalance = this.moneyBasicOperator.getAccountBalance(accountNumber);
+		Assert.assertTrue(accountBalance.doubleValue() == new Double(1490.03));
+	}
 }

@@ -14,13 +14,13 @@ import javax.ws.rs.core.Response;
 import com.companyx.business.MoneyTransaction;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.helper.MoneyHelper;
-import com.companyx.model.MoneyDeposit;
+import com.companyx.model.MoneyOperation;
 import com.companyx.model.MoneyTransfer;
 import com.companyx.reader.MediaTypeReader;
 import com.companyx.service.response.ResponseService;
 
 /**
- * Service of money transaction.
+ * Service of money transactions.
  * Receive the requests, call the execution class and response to the requester, following the media type defined.
  */
 @Path("/transfers")
@@ -73,7 +73,7 @@ public class MoneyTransactionService {
 
 			final String receiverAccountNumber = moneyTransfer.getReceiverAccountNumber();
 			final String senderAccountNumber = moneyTransfer.getSenderAccountNumber();
-			final BigDecimal moneyToTransfer = MoneyHelper.transformTransferMoney(moneyTransfer.getMoneyToTransfer());
+			final BigDecimal moneyToTransfer = MoneyHelper.translateMoney(moneyTransfer.getMoneyToTransfer());
 
 			// execute the transaction
 			this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
@@ -89,10 +89,10 @@ public class MoneyTransactionService {
 	}
 
 	/**
-	 * As a deposit is made in this service, is assumed that an authorization is made before this call.
+	 * As a money deposit is made in this service, is assumed that an authorization is made before this call.
 	 *
 	 * {@value data} expected as JSON format:
-	 * 		{accountNumber, moneyToDeposit}
+	 * 		{accountNumber, money}
 	 *
 	 * @param data JSON data
 	 * @return Response
@@ -101,17 +101,51 @@ public class MoneyTransactionService {
 	@Produces(MoneyTransactionService.MEDIA_TYPE)
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/deposits")
-	public Response depositMoneyService(final String data) {
+	public Response moneyDepositService(final String data) {
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of deposit money service...");
 
 		try {
-			final MoneyDeposit moneyDeposit = (MoneyDeposit) this.reader.readJSONData(data, MoneyDeposit.class);
+			final MoneyOperation moneyDeposit = (MoneyOperation) this.reader.readJSONData(data, MoneyOperation.class);
 
 			final String accountNumber = moneyDeposit.getAccountNumber();
 
-			final BigDecimal moneyToDeposit = MoneyHelper.transformTransferMoney(moneyDeposit.getMoneyToDeposit());
+			final BigDecimal moneyToDeposit = MoneyHelper.translateMoney(moneyDeposit.getMoney());
 
 			this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
+
+			// return the response
+			return javax.ws.rs.core.Response.ok().build();
+
+		} catch (final InternalCommonException exception) {
+			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);
+		}
+	}
+
+	/**
+	 * As a cash withdraw is made in this service, is assumed that an authorization is made before this call.
+	 *
+	 * {@value data} expected as JSON format:
+	 * 		{accountNumber, money}
+	 *
+	 * @param data JSON data
+	 * @return Response
+	 */
+	@POST
+	@Produces(MoneyTransactionService.MEDIA_TYPE)
+	@Consumes(MoneyTransactionService.MEDIA_TYPE)
+	@Path("/withdraw")
+	public Response cashWithdrawService(final String data) {
+		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of withdraw money service...");
+
+		try {
+
+			final MoneyOperation cashWithdraw = (MoneyOperation) this.reader.readJSONData(data, MoneyOperation.class);
+
+			final String accountNumber = cashWithdraw.getAccountNumber();
+
+			final BigDecimal cashToWithdraw = MoneyHelper.translateMoney(cashWithdraw.getMoney());
+
+			this.moneyTransaction.cashWithdraw(accountNumber, cashToWithdraw);
 
 			// return the response
 			return javax.ws.rs.core.Response.ok().build();
