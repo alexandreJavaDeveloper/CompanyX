@@ -20,11 +20,11 @@ import com.companyx.reader.MediaTypeReader;
 import com.companyx.service.response.ResponseService;
 
 /**
- * Service of transactions for money transfer. Receive the requests, call the execution class and response to
- * the requester, following the media type defined.
+ * Service of money transaction.
+ * Receive the requests, call the execution class and response to the requester, following the media type defined.
  */
 @Path("/transfers")
-public class MoneyTransferService {
+public class MoneyTransactionService {
 
 	private static final String MEDIA_TYPE = MediaType.APPLICATION_JSON;
 
@@ -37,13 +37,13 @@ public class MoneyTransferService {
 	private final MediaTypeReader reader;
 
 	static {
-		LOGGER = Logger.getLogger(MoneyTransferService.class.getName());
+		LOGGER = Logger.getLogger(MoneyTransactionService.class.getName());
 	}
 
 	/**
 	 * Basic constructor. Initialize the variables.
 	 */
-	public MoneyTransferService() {
+	public MoneyTransactionService() {
 		this.moneyTransaction = new MoneyTransaction();
 		this.responseService = new ResponseService();
 		this.reader = new MediaTypeReader();
@@ -61,12 +61,12 @@ public class MoneyTransferService {
 	 * @return Response
 	 */
 	@POST
-	@Produces(MoneyTransferService.MEDIA_TYPE)
-	@Consumes(MoneyTransferService.MEDIA_TYPE)
+	@Produces(MoneyTransactionService.MEDIA_TYPE)
+	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/money")
 	public Response transferMoneyService(final String data) {
 
-		MoneyTransferService.LOGGER.log(Level.INFO, "Start of transfer money service...");
+		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of transfer money service...");
 
 		try {
 			final MoneyTransfer moneyTransfer = (MoneyTransfer) this.reader.readJSONData(data, MoneyTransfer.class);
@@ -78,13 +78,13 @@ public class MoneyTransferService {
 			// execute the transaction
 			this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
-			MoneyTransferService.LOGGER.log(Level.INFO, "Ending of transfer money service...");
+			MoneyTransactionService.LOGGER.log(Level.INFO, "Ending of transfer money service...");
 
 			// return the response
 			return javax.ws.rs.core.Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
-			return this.responseService.prepareErrorResponse(MoneyTransferService.LOGGER, exception);
+			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);
 		}
 	}
 
@@ -98,11 +98,11 @@ public class MoneyTransferService {
 	 * @return Response
 	 */
 	@POST
-	@Produces(MoneyTransferService.MEDIA_TYPE)
-	@Consumes(MoneyTransferService.MEDIA_TYPE)
+	@Produces(MoneyTransactionService.MEDIA_TYPE)
+	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/deposits")
 	public Response depositMoneyService(final String data) {
-		MoneyTransferService.LOGGER.log(Level.INFO, "Start of deposit money service...");
+		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of deposit money service...");
 
 		try {
 			final MoneyDeposit moneyDeposit = (MoneyDeposit) this.reader.readJSONData(data, MoneyDeposit.class);
@@ -117,7 +117,7 @@ public class MoneyTransferService {
 			return javax.ws.rs.core.Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
-			return this.responseService.prepareErrorResponse(MoneyTransferService.LOGGER, exception);
+			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);
 		}
 	}
 }

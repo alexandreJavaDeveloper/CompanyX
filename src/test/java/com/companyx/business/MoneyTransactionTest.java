@@ -21,7 +21,7 @@ public class MoneyTransactionTest {
 
 	private MoneyTransaction moneyTransaction;
 
-	private MoneyOperation moneyOperation;
+	private MoneyBasicOperator moneyBasicOperator;
 
 	private MoneyService moneyService;
 
@@ -29,7 +29,7 @@ public class MoneyTransactionTest {
 	public void setup() throws InvalidAttributesException {
 		this.moneyTransaction = new MoneyTransaction();
 		this.moneyService = new MoneyService();
-		this.moneyOperation = new MoneyOperation();
+		this.moneyBasicOperator = new MoneyBasicOperator();
 		RepositoryMock.getInstance().resetData();
 	}
 
@@ -91,7 +91,7 @@ public class MoneyTransactionTest {
 		RepositoryMock.getInstance().resetData();
 		this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
 
-		final BigDecimal accountBalance = this.moneyOperation.getAccountBalance(accountNumber);
+		final BigDecimal accountBalance = this.moneyBasicOperator.getAccountBalance(accountNumber);
 		Assert.assertTrue(accountBalance.doubleValue() == new Double(1510.97));
 	}
 }

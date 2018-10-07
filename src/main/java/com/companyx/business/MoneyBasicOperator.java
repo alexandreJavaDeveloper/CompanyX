@@ -12,14 +12,14 @@ import com.companyx.mock.RepositoryMock;
 import com.companyx.model.Account;
 
 /**
- * Responsible for operations involving money without transactions.
+ * Responsible for basic operations involving money without transactions.
  */
-public class MoneyOperation {
+public class MoneyBasicOperator {
 
 	private static final Logger LOGGER;
 
 	static {
-		LOGGER = Logger.getLogger(MoneyOperation.class.getName());
+		LOGGER = Logger.getLogger(MoneyBasicOperator.class.getName());
 	}
 
 	/**
@@ -33,11 +33,11 @@ public class MoneyOperation {
 	 */
 	public BigDecimal getAccountBalance(final String accountNumber) throws AccountNotFoundException, InternalSystemError, InvalidAttributesException {
 
-		MoneyOperation.LOGGER.log(Level.INFO, StringsI18N.START_ACCOUNT_BALANCE_MONEY);
+		MoneyBasicOperator.LOGGER.log(Level.INFO, StringsI18N.START_ACCOUNT_BALANCE_MONEY);
 
 		final Account account = RepositoryMock.getInstance().find(accountNumber);
 
-		MoneyOperation.LOGGER.log(Level.INFO, StringsI18N.END_ACCOUNT_BALANCE_MONEY);
+		MoneyBasicOperator.LOGGER.log(Level.INFO, StringsI18N.END_ACCOUNT_BALANCE_MONEY);
 
 		return account.getMoney();
 	}

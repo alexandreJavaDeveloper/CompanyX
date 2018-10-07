@@ -10,11 +10,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.companyx.business.MoneyOperation;
+import com.companyx.business.MoneyBasicOperator;
 import com.companyx.exception.InternalCommonException;
 import com.companyx.helper.MoneyHelper;
 import com.companyx.service.response.ResponseService;
 
+/**
+ * Money service for basic operations of money without transactions.
+ */
 @Path("/money")
 public class MoneyService {
 
@@ -22,7 +25,7 @@ public class MoneyService {
 
 	private static final Logger LOGGER;
 
-	private final MoneyOperation moneyOperation;
+	private final MoneyBasicOperator moneyBasicOperator;
 
 	private final ResponseService responseService;
 
@@ -34,7 +37,7 @@ public class MoneyService {
 	 * Basic constructor. Initialize the variables.
 	 */
 	public MoneyService() {
-		this.moneyOperation = new MoneyOperation();
+		this.moneyBasicOperator = new MoneyBasicOperator();
 		this.responseService = new ResponseService();
 	}
 
@@ -53,7 +56,7 @@ public class MoneyService {
 
 		try {
 
-			final String accountBalance = MoneyHelper.formattMoney(this.moneyOperation.getAccountBalance(accountNumber));
+			final String accountBalance = MoneyHelper.formattMoney(this.moneyBasicOperator.getAccountBalance(accountNumber));
 
 			MoneyService.LOGGER.log(Level.INFO, "Ending of account balance service...");
 
