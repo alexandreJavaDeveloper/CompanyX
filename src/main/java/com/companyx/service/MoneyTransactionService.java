@@ -75,13 +75,11 @@ public class MoneyTransactionService {
 			final String senderAccountNumber = moneyTransfer.getSenderAccountNumber();
 			final BigDecimal moneyToTransfer = MoneyHelper.translateMoney(moneyTransfer.getMoneyToTransfer());
 
-			// execute the transaction
 			this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
 			MoneyTransactionService.LOGGER.log(Level.INFO, "Ending of transfer money service...");
 
-			// return the response
-			return javax.ws.rs.core.Response.ok().build();
+			return Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
 			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);
@@ -102,6 +100,7 @@ public class MoneyTransactionService {
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/deposits")
 	public Response moneyDepositService(final String data) {
+
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of deposit money service...");
 
 		try {
@@ -113,8 +112,7 @@ public class MoneyTransactionService {
 
 			this.moneyTransaction.deposit(accountNumber, moneyToDeposit);
 
-			// return the response
-			return javax.ws.rs.core.Response.ok().build();
+			return Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
 			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);
@@ -135,6 +133,7 @@ public class MoneyTransactionService {
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/withdraw")
 	public Response cashWithdrawService(final String data) {
+
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of withdraw money service...");
 
 		try {
@@ -147,8 +146,7 @@ public class MoneyTransactionService {
 
 			this.moneyTransaction.cashWithdraw(accountNumber, cashToWithdraw);
 
-			// return the response
-			return javax.ws.rs.core.Response.ok().build();
+			return Response.ok().build();
 
 		} catch (final InternalCommonException exception) {
 			return this.responseService.prepareErrorResponse(MoneyTransactionService.LOGGER, exception);

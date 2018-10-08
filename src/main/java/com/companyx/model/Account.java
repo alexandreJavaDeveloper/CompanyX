@@ -10,14 +10,20 @@ import com.companyx.exception.InvalidMoneyException;
 import com.companyx.i18n.StringsI18N;
 
 /**
- * Represents an account for performing money transaction by #{@link MoneyTransaction}.
+ * Represents an account for performing money transaction by #{@link MoneyTransaction} class.
  */
 public class Account implements Cloneable {
 
+	// used for setting the amount precision of the 'money' attribute
 	private static final int DECIMAL_SCALE_MONEY = 2;
 
+	// used for ensuring the security of the 'money' attribute
+	private final Object lock = new Object();
+
+	// represents the account number of the account
 	private final String accountNumber;
 
+	// safe attribute. Represents the current money/cash of the account
 	private BigDecimal money;
 
 	/**
@@ -32,7 +38,47 @@ public class Account implements Cloneable {
 			throw new InvalidAttributesException(StringsI18N.ACCOUNT_NUMBER_MONEY_REQUIRED);
 
 		this.accountNumber = accountNumber;
-		this.money = money.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
+		this.money = money.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP); // setting the amount precision
+	}
+
+	/**
+	 * Safe method.
+	 * Sum the current money with the {@value moneyToSum} parameter.
+	 *
+	 * @param moneyToSum
+	 * @throws InvalidMoneyException
+	 */
+	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
+
+		synchronized (this.lock) {
+			if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
+				throw new InvalidMoneyException();
+
+			this.money = this.money.add(moneyToSum). // setting the amount precision
+					setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
+		}
+	}
+
+	/**
+	 * Safe method.
+	 * Subtract the current money with the {@value moneyToSubtract} parameter.
+	 *
+	 * @param moneyToSubtract
+	 * @throws InsufficientFundsException
+	 * @throws InvalidMoneyException
+	 */
+	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
+
+		synchronized (this.lock) {
+			if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
+				throw new InvalidMoneyException();
+
+			if (this.money.compareTo(moneyToSubtract.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP)) < 0)
+				throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
+
+			this.money = this.money.subtract(moneyToSubtract). // setting the amount precision
+					setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
+		}
 	}
 
 	public String getAccountNumber() {
@@ -41,38 +87,6 @@ public class Account implements Cloneable {
 
 	public BigDecimal getMoney() {
 		return this.money;
-	}
-
-	/**
-	 * Sum the current money with the {@value moneyToSum} parameter.
-	 *
-	 * @param moneyToSum
-	 * @throws InvalidMoneyException
-	 */
-	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
-		if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
-			throw new InvalidMoneyException();
-
-		this.money = this.money.add(moneyToSum). // setting the amount precision
-				setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
-	}
-
-	/**
-	 * Subtract the current money with the {@value moneyToSubtract} parameter.
-	 *
-	 * @param moneyToSubtract
-	 * @throws InsufficientFundsException
-	 * @throws InvalidMoneyException
-	 */
-	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
-		if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
-			throw new InvalidMoneyException();
-
-		if (this.money.compareTo(moneyToSubtract.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP)) < 0)
-			throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
-
-		this.money = this.money.subtract(moneyToSubtract). // setting the amount precision
-				setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 	}
 
 	@Override

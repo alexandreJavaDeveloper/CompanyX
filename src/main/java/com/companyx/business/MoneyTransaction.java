@@ -10,7 +10,8 @@ import com.companyx.mock.RepositoryMock;
 import com.companyx.model.Account;
 
 /**
- * Class to execute all transactions of money.
+ * Performs all transactions of money.
+ * Each operation is treated carrying about the rollback action into database/memory in case of fail.
  */
 public class MoneyTransaction {
 
@@ -30,7 +31,7 @@ public class MoneyTransaction {
 	 * @param moneyToTransfer
 	 * @throws InternalCommonException
 	 */
-	public synchronized void transfer(final String receiverAccountNumber, final String senderAccountNumber,
+	public void transfer(final String receiverAccountNumber, final String senderAccountNumber,
 			final BigDecimal moneyToTransfer) throws InternalCommonException {
 
 		MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.START_TRANSFER_MONEY);
@@ -87,7 +88,6 @@ public class MoneyTransaction {
 
 			account.sumMoney(moneyToDeposit);
 
-			// update the account
 			RepositoryMock.getInstance().updateAccount(account);
 
 			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_DEPOSIT_MONEY);
@@ -123,7 +123,6 @@ public class MoneyTransaction {
 
 			account.subtractMoney(cashToWithdraw);
 
-			// update the account
 			RepositoryMock.getInstance().updateAccount(account);
 
 			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_CASH_WITHDRAW);
