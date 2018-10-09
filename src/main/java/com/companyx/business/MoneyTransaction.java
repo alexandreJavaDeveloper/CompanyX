@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.companyx.exception.InternalCommonException;
-import com.companyx.i18n.StringsI18N;
+import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
 import com.companyx.model.Account;
 
@@ -26,23 +26,26 @@ public class MoneyTransaction {
 	 * The operation is synchronized for ensuring the transfer between two accounts happens without another
 	 * process changing at the same time.
 	 *
-	 * @param receiverAccountNumber
 	 * @param senderAccountNumber
+	 * @param receiverAccountNumber
 	 * @param moneyToTransfer
 	 * @throws InternalCommonException
 	 */
-	public void transfer(final String receiverAccountNumber, final String senderAccountNumber,
+	public void transfer(final String senderAccountNumber, final String receiverAccountNumber,
 			final BigDecimal moneyToTransfer) throws InternalCommonException {
 
-		MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.START_TRANSFER_MONEY);
-
-		final Account receiver = RepositoryMock.getInstance().find(receiverAccountNumber);
+		MoneyTransaction.LOGGER.log(Level.INFO, "Starting the money transfer between two accounts.");
 
 		final Account sender = RepositoryMock.getInstance().find(senderAccountNumber);
 
-		final Account backupReceiver = receiver.cloneAccount();
+		final Account receiver = RepositoryMock.getInstance().find(receiverAccountNumber);
 
 		final Account backupSender = sender.cloneAccount();
+
+		final Account backupReceiver = receiver.cloneAccount();
+
+		MoneyTransaction.LOGGER.log(Level.INFO, "Transaction sender from: " + senderAccountNumber + " to: "
+				+ receiverAccountNumber + " the cash: " + MoneyHelper.formattMoney(moneyToTransfer));
 
 		try {
 
@@ -51,19 +54,19 @@ public class MoneyTransaction {
 			receiver.sumMoney(moneyToTransfer);
 
 			// update the accounts
-			RepositoryMock.getInstance().updateAccount(receiver);
 			RepositoryMock.getInstance().updateAccount(sender);
+			RepositoryMock.getInstance().updateAccount(receiver);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_TRANSFER_MONEY);
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the money transfer between two accounts.");
 
 		} catch (final InternalCommonException e) {
 
-			MoneyTransaction.LOGGER.log(Level.SEVERE, StringsI18N.TRANSFER_MONEY_ERROR, e);
+			MoneyTransaction.LOGGER.log(Level.SEVERE, "Transfer problem between two accounts.", e);
 
 			// in case of any problem the rollback should be done
 			// TODO in case of fail? What to do? Give the responsibility to the database?
-			RepositoryMock.getInstance().rollback(backupReceiver);
 			RepositoryMock.getInstance().rollback(backupSender);
+			RepositoryMock.getInstance().rollback(backupReceiver);
 			throw e;
 		}
 	}
@@ -78,7 +81,7 @@ public class MoneyTransaction {
 	 */
 	public void deposit(final String accountNumber, final BigDecimal moneyToDeposit) throws InternalCommonException {
 
-		MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.START_DEPOSIT_MONEY);
+		MoneyTransaction.LOGGER.log(Level.INFO, "Starting the money deposit.");
 
 		final Account account = RepositoryMock.getInstance().find(accountNumber);
 
@@ -90,11 +93,11 @@ public class MoneyTransaction {
 
 			RepositoryMock.getInstance().updateAccount(account);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_DEPOSIT_MONEY);
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the money deposit.");
 
 		} catch (final InternalCommonException e) {
 
-			MoneyTransaction.LOGGER.log(Level.SEVERE, StringsI18N.DEPOSIT_MONEY_ERROR, e);
+			MoneyTransaction.LOGGER.log(Level.SEVERE, "Deposit money problem.", e);
 
 			// in case of any problem the rollback should be done
 			// TODO in case of fail? What to do? Give the responsibility to the database?
@@ -113,7 +116,7 @@ public class MoneyTransaction {
 	 */
 	public void cashWithdraw(final String accountNumber, final BigDecimal cashToWithdraw) throws InternalCommonException {
 
-		MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.START_CASH_WITHDRAW);
+		MoneyTransaction.LOGGER.log(Level.INFO, "Starting the withdraw money.");
 
 		final Account account = RepositoryMock.getInstance().find(accountNumber);
 
@@ -125,11 +128,11 @@ public class MoneyTransaction {
 
 			RepositoryMock.getInstance().updateAccount(account);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, StringsI18N.END_CASH_WITHDRAW);
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the withdraw money.");
 
 		} catch (final InternalCommonException e) {
 
-			MoneyTransaction.LOGGER.log(Level.SEVERE, StringsI18N.CASH_WITHDRAW_ERROR, e);
+			MoneyTransaction.LOGGER.log(Level.SEVERE, "Cash withdraw problem.", e);
 
 			// in case of any problem the rollback should be done
 			// TODO in case of fail? What to do? Give the responsibility to the database?

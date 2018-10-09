@@ -28,7 +28,7 @@ public class MoneyTransactionServiceTest
 
 	@Test
 	public void successTransferTest() throws InvalidAttributesException {
-		this.moneyTransactionService.transferMoneyService(this.fetchJSONData("1A", "2A", "100.34242342423"));
+		this.moneyTransactionService.transferService(this.fetchJSONData("1A", "2A", "100.34242342423"));
 
 		Response response = this.moneyService.accountBalanceService("1A");
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -45,7 +45,7 @@ public class MoneyTransactionServiceTest
 		RepositoryMock.getInstance().resetData();
 
 		// sending 0 as money to transfer
-		response = this.moneyTransactionService.transferMoneyService(this.fetchJSONData("1A", "2A", "0"));
+		response = this.moneyTransactionService.transferService(this.fetchJSONData("1A", "2A", "0"));
 
 		response = this.moneyService.accountBalanceService("1A");
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -61,46 +61,46 @@ public class MoneyTransactionServiceTest
 
 	@Test
 	public void invalidParametersTransferTest() {
-		final Response response = this.moneyTransactionService.transferMoneyService(this.fetchJSONData("1A", "2A", "testing Strings"));
+		final Response response = this.moneyTransactionService.transferService(this.fetchJSONData("1A", "2A", "testing Strings"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalidParametersTransfer2Test() {
-		final Response response = this.moneyTransactionService.transferMoneyService(null);
+		final Response response = this.moneyTransactionService.transferService(null);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalidParsingJSONTest() {
 		final String jsonData = "{dsds,dsds,ds,ds,ds,ds,dsdsds,dsds,ds}";
-		final Response response = this.moneyTransactionService.transferMoneyService(jsonData);
+		final Response response = this.moneyTransactionService.transferService(jsonData);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void accountNotFoundTest() {
-		final Response response = this.moneyTransactionService.transferMoneyService(this.fetchJSONData("1hfduihfdsiA", "2A", "90"));
+		final Response response = this.moneyTransactionService.transferService(this.fetchJSONData("1hfduihfdsiA", "2A", "90"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void insufficientFundsTest() {
-		final Response response = this.moneyTransactionService.transferMoneyService(this.fetchJSONData("1A", "2A", "5000.10"));
+		final Response response = this.moneyTransactionService.transferService(this.fetchJSONData("1A", "2A", "5000.10"));
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalidMoneyDepositServiceTest() {
 		final String data = "";
-		final Response response = this.moneyTransactionService.moneyDepositService(data);
+		final Response response = this.moneyTransactionService.depositService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalid2MoneyDepositServiceTest() {
 		final String data = "jfdswuew7u89798798";
-		final Response response = this.moneyTransactionService.moneyDepositService(data);
+		final Response response = this.moneyTransactionService.depositService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
@@ -113,7 +113,7 @@ public class MoneyTransactionServiceTest
 		// reset the database
 		RepositoryMock.getInstance().resetData();
 
-		Response response = this.moneyTransactionService.moneyDepositService(data);
+		Response response = this.moneyTransactionService.depositService(data);
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		response = this.moneyService.accountBalanceService("1A");
@@ -132,14 +132,14 @@ public class MoneyTransactionServiceTest
 	@Test
 	public void invalidCashWithdrawServiceTest() {
 		final String data = "";
-		final Response response = this.moneyTransactionService.cashWithdrawService(data);
+		final Response response = this.moneyTransactionService.withdrawService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
 	@Test
 	public void invalid2CashWithdrawServiceTest() {
 		final String data = "jfdswuew7u89798798";
-		final Response response = this.moneyTransactionService.cashWithdrawService(data);
+		final Response response = this.moneyTransactionService.withdrawService(data);
 		Assert.assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 
@@ -152,7 +152,7 @@ public class MoneyTransactionServiceTest
 		// reset the database
 		RepositoryMock.getInstance().resetData();
 
-		Response response = this.moneyTransactionService.cashWithdrawService(data);
+		Response response = this.moneyTransactionService.withdrawService(data);
 		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		response = this.moneyService.accountBalanceService("1A");

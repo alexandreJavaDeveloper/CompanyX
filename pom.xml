@@ -20,6 +20,11 @@
 		    <scope>test</scope>
 		</dependency>
 		<dependency>
+        	<groupId>com.vmlens</groupId>
+          	<artifactId>concurrent-junit</artifactId>
+          	<version>1.0.2</version>
+     	</dependency>
+		<dependency>
 		    <groupId>org.codehaus.jackson</groupId>
 		    <artifactId>jackson-jaxrs</artifactId>
 		    <version>1.9.13</version>

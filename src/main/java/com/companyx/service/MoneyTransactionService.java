@@ -23,7 +23,7 @@ import com.companyx.service.response.ResponseService;
  * Service of money transactions.
  * Receive the requests, call the execution class and response to the requester, following the media type defined.
  */
-@Path("/transfers")
+@Path("/transactions")
 public class MoneyTransactionService {
 
 	private static final String MEDIA_TYPE = MediaType.APPLICATION_JSON;
@@ -55,7 +55,7 @@ public class MoneyTransactionService {
 	 * with money between two accounts.
 	 *
 	 * {@value data} expected as JSON format:
-	 * 		{receiverAccountNumber, senderAccountNumber, moneyToTransfer}
+	 * 		{senderAccountNumber, receiverAccountNumber, moneyToTransfer}
 	 *
 	 * @param data JSON data
 	 * @return Response
@@ -63,19 +63,19 @@ public class MoneyTransactionService {
 	@POST
 	@Produces(MoneyTransactionService.MEDIA_TYPE)
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
-	@Path("/money")
-	public Response transferMoneyService(final String data) {
+	@Path("/transfers")
+	public Response transferService(final String data) {
 
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of transfer money service...");
 
 		try {
 			final MoneyTransfer moneyTransfer = (MoneyTransfer) this.reader.readJSONData(data, MoneyTransfer.class);
 
-			final String receiverAccountNumber = moneyTransfer.getReceiverAccountNumber();
 			final String senderAccountNumber = moneyTransfer.getSenderAccountNumber();
+			final String receiverAccountNumber = moneyTransfer.getReceiverAccountNumber();
 			final BigDecimal moneyToTransfer = MoneyHelper.translateMoney(moneyTransfer.getMoneyToTransfer());
 
-			this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
+			this.moneyTransaction.transfer(senderAccountNumber, receiverAccountNumber, moneyToTransfer);
 
 			MoneyTransactionService.LOGGER.log(Level.INFO, "Ending of transfer money service...");
 
@@ -99,7 +99,7 @@ public class MoneyTransactionService {
 	@Produces(MoneyTransactionService.MEDIA_TYPE)
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/deposits")
-	public Response moneyDepositService(final String data) {
+	public Response depositService(final String data) {
 
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of deposit money service...");
 
@@ -132,7 +132,7 @@ public class MoneyTransactionService {
 	@Produces(MoneyTransactionService.MEDIA_TYPE)
 	@Consumes(MoneyTransactionService.MEDIA_TYPE)
 	@Path("/withdraw")
-	public Response cashWithdrawService(final String data) {
+	public Response withdrawService(final String data) {
 
 		MoneyTransactionService.LOGGER.log(Level.INFO, "Start of withdraw money service...");
 

@@ -50,10 +50,10 @@ public class Account implements Cloneable {
 	 */
 	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
 
-		synchronized (this.lock) {
-			if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
-				throw new InvalidMoneyException();
+		if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
+			throw new InvalidMoneyException();
 
+		synchronized (this.lock) {
 			this.money = this.money.add(moneyToSum). // setting the amount precision
 					setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 		}
@@ -69,10 +69,10 @@ public class Account implements Cloneable {
 	 */
 	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
 
-		synchronized (this.lock) {
-			if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
-				throw new InvalidMoneyException();
+		if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
+			throw new InvalidMoneyException();
 
+		synchronized (this.lock) {
 			if (this.money.compareTo(moneyToSubtract.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP)) < 0)
 				throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
 

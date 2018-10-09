@@ -37,8 +37,8 @@ public class MoneyTransactionTest {
 	public void transferTest() throws InternalCommonException {
 		final BigDecimal moneyToTransfer = new BigDecimal(10);
 
-		final String receiverAccountNumber = "1A";
-		final String senderAccountNumber = "2A";
+		final String senderAccountNumber = "1A";
+		final String receiverAccountNumber = "2A";
 		this.moneyTransaction.transfer(receiverAccountNumber, senderAccountNumber, moneyToTransfer);
 
 		Response response = this.moneyService.accountBalanceService("1A");
