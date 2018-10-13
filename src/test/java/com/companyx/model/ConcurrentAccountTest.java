@@ -1,6 +1,12 @@
 package com.companyx.model;
 
+import java.math.BigDecimal;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +14,7 @@ import org.junit.runner.RunWith;
 import com.anarsoft.vmlens.concurrent.junit.ConcurrentTestRunner;
 import com.anarsoft.vmlens.concurrent.junit.ThreadCount;
 import com.companyx.exception.InvalidAttributesException;
+import com.companyx.helper.MoneyHelper;
 import com.companyx.mock.RepositoryMock;
 import com.companyx.service.MoneyService;
 import com.companyx.service.MoneyTransactionService;
@@ -63,16 +70,16 @@ public class ConcurrentAccountTest {
 
 	@After
 	public void after() {
-		//		Response response = this.moneyService.accountBalanceService("1A");
-		//		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		//		final String money1A = (String) response.getEntity();
-		//
-		//		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(598.50)), money1A);
-		//
-		//		response = this.moneyService.accountBalanceService("2A");
-		//		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		//		final String money2A = (String) response.getEntity();
-		//
-		//		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(5055.80)), money2A);
+		Response response = this.moneyService.accountBalanceService("1A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money1A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(598.50)), money1A);
+
+		response = this.moneyService.accountBalanceService("2A");
+		Assert.assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		final String money2A = (String) response.getEntity();
+
+		Assert.assertEquals(MoneyHelper.formattMoney(new BigDecimal(5055.80)), money2A);
 	}
 }

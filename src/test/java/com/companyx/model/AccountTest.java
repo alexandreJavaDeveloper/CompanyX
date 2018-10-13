@@ -6,7 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.companyx.exception.AccountNotFoundException;
 import com.companyx.exception.InsufficientFundsException;
+import com.companyx.exception.InternalSystemError;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
 import com.companyx.mock.RepositoryMock;
@@ -19,7 +21,7 @@ public class AccountTest {
 	}
 
 	@Test
-	public void hashCodeAccountTest()  {
+	public void hashCodeAccountTest() {
 		try {
 			final Account account = new Account("1A", new BigDecimal(10));
 			final int expected = 1584;
@@ -44,29 +46,29 @@ public class AccountTest {
 	}
 
 	@Test(expected=InvalidMoneyException.class)
-	public void invalidMoneyToSumMoneyTest() throws InvalidAttributesException, InvalidMoneyException {
+	public void invalidMoneyToSumMoneyTest() throws InvalidAttributesException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSum = new BigDecimal(-1);
 		account.sumMoney(moneyToSum);
 	}
 
 	@Test
-	public void validMoneyToSumMoneyTest() {
+	public void validMoneyToSumMoneyTest() throws AccountNotFoundException, InternalSystemError {
 		try {
-			final Account account = new Account("1A", new BigDecimal(10));
+			final Account account = new Account("1A", new BigDecimal(1500.50));
 			BigDecimal moneyToSum = new BigDecimal(0);
 
 			account.sumMoney(moneyToSum);
-			Assert.assertEquals(10, account.getMoney().intValue());
+			Assert.assertTrue(1500.50 == account.getMoney().doubleValue());
 
-			moneyToSum = new BigDecimal(10);
+			moneyToSum = new BigDecimal(1500.50);
 			account.sumMoney(moneyToSum);
-			Assert.assertEquals(20, account.getMoney().intValue());
+			Assert.assertTrue(3001 == account.getMoney().doubleValue());
 
-			moneyToSum = new BigDecimal(10.53);
+			moneyToSum = new BigDecimal(11.03);
 			account.sumMoney(moneyToSum);
-			final double doubleValue = new BigDecimal(30.53).doubleValue();
-			Assert.assertTrue(doubleValue == account.getMoney().doubleValue());
+
+			Assert.assertTrue(1511.53 == account.getMoney().doubleValue());
 
 		} catch (InvalidAttributesException | InvalidMoneyException e) {
 			Assert.fail();
@@ -74,28 +76,28 @@ public class AccountTest {
 	}
 
 	@Test(expected=InvalidMoneyException.class)
-	public void invalidMoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalidMoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSubtract = new BigDecimal(-1);
 		account.subtractMoney(moneyToSubtract);
 	}
 
 	@Test(expected=InsufficientFundsException.class)
-	public void invalid2MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid2MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 		final Account account = new Account("1A", new BigDecimal(10));
-		final BigDecimal moneyToSubtract = new BigDecimal(1000);
+		final BigDecimal moneyToSubtract = new BigDecimal(10000);
 		account.subtractMoney(moneyToSubtract);
 	}
 
 	@Test(expected=InvalidMoneyException.class)
-	public void invalid3MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid3MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 		final Account account = new Account("1A", new BigDecimal(10));
 		final BigDecimal moneyToSubtract = null;
 		account.subtractMoney(moneyToSubtract);
 	}
 
 	@Test
-	public void subtractMoneyTest() {
+	public void subtractMoneyTest() throws AccountNotFoundException, InternalSystemError {
 
 		try {
 
@@ -122,7 +124,7 @@ public class AccountTest {
 	}
 
 	@Test
-	public void subtract2MoneyTest() {
+	public void subtract2MoneyTest() throws AccountNotFoundException, InternalSystemError {
 
 		try {
 
@@ -149,12 +151,12 @@ public class AccountTest {
 	}
 
 	@Test(expected=InsufficientFundsException.class)
-	public void invalid4MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid4MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 
 		RepositoryMock.getInstance().resetData();
 
 		final Account account = new Account("1A", new BigDecimal(1500.50));
-		BigDecimal moneyToSubtract = new BigDecimal(1500.40);
+		BigDecimal moneyToSubtract = new BigDecimal(15000.40);
 		account.subtractMoney(moneyToSubtract);
 
 		moneyToSubtract = new BigDecimal(0.11);
@@ -162,12 +164,12 @@ public class AccountTest {
 	}
 
 	@Test(expected=InsufficientFundsException.class)
-	public void invalid5MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException {
+	public void invalid5MoneyToSubtractMoneyTest() throws InvalidAttributesException, InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError {
 
 		RepositoryMock.getInstance().resetData();
 
 		final Account account = new Account("1A", new BigDecimal(1500.50));
-		BigDecimal moneyToSubtract = new BigDecimal(1500.40);
+		BigDecimal moneyToSubtract = new BigDecimal(1500.51);
 		account.subtractMoney(moneyToSubtract);
 
 		moneyToSubtract = new BigDecimal(0.106999);
@@ -191,26 +193,35 @@ public class AccountTest {
 	}
 
 	@Test
-	public void validMoneyToSubtractMoneyTest() {
+	public void validMoneyToSubtractMoneyTest() throws AccountNotFoundException, InternalSystemError {
 		try {
-			final Account account = new Account("1A", new BigDecimal(10));
+			final Account account = new Account("1A", new BigDecimal(1500.50));
 			BigDecimal moneyToSum = new BigDecimal(0);
 
 			account.sumMoney(moneyToSum);
-			Assert.assertEquals(10, account.getMoney().intValue());
+			Assert.assertTrue(1500.50 == account.getMoney().doubleValue());
 
 			moneyToSum = new BigDecimal(10);
 			account.sumMoney(moneyToSum);
-			Assert.assertEquals(20, account.getMoney().intValue());
+			Assert.assertTrue(1510.50 == account.getMoney().doubleValue());
+
+			RepositoryMock.getInstance().updateAccount(account);
 
 			moneyToSum = new BigDecimal(10.53);
 			account.sumMoney(moneyToSum);
-			final double doubleValue = new BigDecimal(30.53).doubleValue();
-			Assert.assertTrue(doubleValue == account.getMoney().doubleValue());
+			Assert.assertTrue(1521.03 == account.getMoney().doubleValue());
 		} catch (InvalidAttributesException | InvalidMoneyException e) {
 			Assert.fail();
 		}
 	}
+
+	//	@Test
+	//	public void accountNotFoundTest() throws AccountNotFoundException, InternalSystemError, InvalidAttributesException {
+	//		final Account account = new Account("1A", new BigDecimal(10));
+	//		final BigDecimal moneyToSum = new BigDecimal(0);
+	//
+	//		account.sumMoney(moneyToSum);
+	//	}
 
 	@Test
 	public void methodGetMoneyNotChangeableTest() {

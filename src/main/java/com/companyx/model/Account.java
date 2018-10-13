@@ -3,11 +3,13 @@ package com.companyx.model;
 import java.math.BigDecimal;
 
 import com.companyx.business.MoneyTransaction;
+import com.companyx.exception.AccountNotFoundException;
 import com.companyx.exception.InsufficientFundsException;
 import com.companyx.exception.InternalSystemError;
 import com.companyx.exception.InvalidAttributesException;
 import com.companyx.exception.InvalidMoneyException;
 import com.companyx.i18n.StringsI18N;
+import com.companyx.mock.RepositoryMock;
 
 /**
  * Represents an account for performing money transaction by #{@link MoneyTransaction} class.
@@ -47,13 +49,19 @@ public class Account implements Cloneable {
 	 *
 	 * @param moneyToSum
 	 * @throws InvalidMoneyException
+	 * @throws InvalidAttributesException
+	 * @throws InternalSystemError
+	 * @throws AccountNotFoundException
 	 */
-	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException {
+	public void sumMoney(final BigDecimal moneyToSum) throws InvalidMoneyException, AccountNotFoundException, InternalSystemError, InvalidAttributesException {
 
 		if (moneyToSum == null || moneyToSum.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
 		synchronized (this.lock) {
+
+			this.money = RepositoryMock.getInstance().find(this.accountNumber).getMoney();
+
 			this.money = this.money.add(moneyToSum). // setting the amount precision
 					setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP);
 		}
@@ -66,13 +74,19 @@ public class Account implements Cloneable {
 	 * @param moneyToSubtract
 	 * @throws InsufficientFundsException
 	 * @throws InvalidMoneyException
+	 * @throws InvalidAttributesException
+	 * @throws InternalSystemError
+	 * @throws AccountNotFoundException
 	 */
-	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException {
+	public void subtractMoney(final BigDecimal moneyToSubtract) throws InsufficientFundsException, InvalidMoneyException, AccountNotFoundException, InternalSystemError, InvalidAttributesException {
 
 		if (moneyToSubtract == null || moneyToSubtract.compareTo(BigDecimal.ZERO) < 0)
 			throw new InvalidMoneyException();
 
 		synchronized (this.lock) {
+
+			this.money = RepositoryMock.getInstance().find(this.accountNumber).getMoney();
+
 			if (this.money.compareTo(moneyToSubtract.setScale(Account.DECIMAL_SCALE_MONEY, BigDecimal.ROUND_HALF_UP)) < 0)
 				throw new InsufficientFundsException(StringsI18N.INSUFFICIENT_FUNDS);
 
