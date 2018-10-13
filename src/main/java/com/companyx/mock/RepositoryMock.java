@@ -69,16 +69,13 @@ public class RepositoryMock {
 	}
 
 	/**
-	 * Do a rollback transaction of the {@value account} parameter.
+	 * Do rollback transaction of the account.
 	 *
-	 * TODO create a rollback without parameters. Do rollback of all operation. In that case,
-	 * would be better using JDBC, like: "Connection conn; conn.rollback()".
-	 *
-	 * @param account Account
+	 * @param accountNumber
 	 */
-	public void rollback(final Account account) {
-		// in this case, just put the old (backup) account
-		this.updateAccount(account);
+	public void rollback(final String accountNumber) {
+		// TODO create a rollback without parameters. Do rollback of all operation. In that case,
+		//would be better using JDBC, like: "Connection conn; conn.rollback()".
 	}
 
 	/**

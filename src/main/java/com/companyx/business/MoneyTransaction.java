@@ -40,33 +40,26 @@ public class MoneyTransaction {
 
 		final Account receiver = RepositoryMock.getInstance().find(receiverAccountNumber);
 
-		final Account backupSender = sender.cloneAccount();
-
-		final Account backupReceiver = receiver.cloneAccount();
-
 		MoneyTransaction.LOGGER.log(Level.INFO, "Transaction sender from: " + senderAccountNumber + " to: "
 				+ receiverAccountNumber + " the cash: " + MoneyHelper.formattMoney(moneyToTransfer));
 
 		try {
 
 			sender.subtractMoney(moneyToTransfer);
-
 			receiver.sumMoney(moneyToTransfer);
 
 			// update the accounts
 			RepositoryMock.getInstance().updateAccount(sender);
 			RepositoryMock.getInstance().updateAccount(receiver);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the money transfer between two accounts.");
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ended the money transfer between two accounts.");
 
 		} catch (final InternalCommonException e) {
 
 			MoneyTransaction.LOGGER.log(Level.SEVERE, "Transfer problem between two accounts.", e);
 
-			// in case of any problem the rollback should be done
-			// TODO in case of fail? What to do? Give the responsibility to the database?
-			RepositoryMock.getInstance().rollback(backupSender);
-			RepositoryMock.getInstance().rollback(backupReceiver);
+			RepositoryMock.getInstance().rollback(senderAccountNumber);
+			RepositoryMock.getInstance().rollback(receiverAccountNumber);
 			throw e;
 		}
 	}
@@ -85,23 +78,19 @@ public class MoneyTransaction {
 
 		final Account account = RepositoryMock.getInstance().find(accountNumber);
 
-		final Account backupAccount = account.cloneAccount();
-
 		try {
 
 			account.sumMoney(moneyToDeposit);
 
 			RepositoryMock.getInstance().updateAccount(account);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the money deposit.");
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ended the money deposit.");
 
 		} catch (final InternalCommonException e) {
 
 			MoneyTransaction.LOGGER.log(Level.SEVERE, "Deposit money problem.", e);
 
-			// in case of any problem the rollback should be done
-			// TODO in case of fail? What to do? Give the responsibility to the database?
-			RepositoryMock.getInstance().rollback(backupAccount);
+			RepositoryMock.getInstance().rollback(accountNumber);
 			throw e;
 		}
 	}
@@ -120,23 +109,19 @@ public class MoneyTransaction {
 
 		final Account account = RepositoryMock.getInstance().find(accountNumber);
 
-		final Account backupAccount = account.cloneAccount();
-
 		try {
 
 			account.subtractMoney(cashToWithdraw);
 
 			RepositoryMock.getInstance().updateAccount(account);
 
-			MoneyTransaction.LOGGER.log(Level.INFO, "Ending the withdraw money.");
+			MoneyTransaction.LOGGER.log(Level.INFO, "Ended the withdraw money.");
 
 		} catch (final InternalCommonException e) {
 
 			MoneyTransaction.LOGGER.log(Level.SEVERE, "Cash withdraw problem.", e);
 
-			// in case of any problem the rollback should be done
-			// TODO in case of fail? What to do? Give the responsibility to the database?
-			RepositoryMock.getInstance().rollback(backupAccount);
+			RepositoryMock.getInstance().rollback(accountNumber);
 			throw e;
 		}
 	}
